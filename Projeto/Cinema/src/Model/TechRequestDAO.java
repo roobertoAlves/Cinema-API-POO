@@ -1,0 +1,113 @@
+package Model;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import database.DBConnection;
+
+public class TechRequestDAO 
+{
+    private Statement dbLink = null;
+
+	public TechRequestDAO() 
+    {
+		try 
+        {
+			this.dbLink = new DBConnection().getConnection().createStatement();
+		} 
+        catch ( SQLException e ) 
+        {
+			e.printStackTrace();
+		}
+
+	}
+
+	public int insert(  TechRequest request ) 
+    {
+		try 
+        {
+			int linesAfected = 0;
+
+			if ( request.getIdRequest() > 0 ) 
+            {
+                String cmd = "INSERT INTO DBCinema.TBChamadosTec ( "
+                    + "id_chamado, "
+                    + "descricao, "
+                    + "statusChamado, "
+                    + "dataAbertura, "
+                    + "sala_id) ";
+                cmd +=  request.getIdRequest() +"', '" + request.getIdRequest() +
+                    ")'" ;
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+            else
+            {
+				return 0;
+			}
+		} 
+        catch ( SQLException e ) 
+        {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+
+	public int update( TechRequest request ) 
+    {
+		return 0;
+	}
+
+	public int delete( TechRequest request ) 
+    {
+		try 
+        {
+			int linesAfected = 0;
+
+			if ( request.getIdRequest() > 0 ) 
+            {
+                String cmd = "DELETE FROM DBCinema.TBChamadosTec WHERE id_chamado = " + request.getIdRequest();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+
+			}
+            else
+            {
+				return 0;
+			}
+		} 
+        catch ( SQLException e ) 
+        {
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+
+	public ResultSet list( String where ) 
+    {
+        String cmd = "SELECT id_chamado, descricao, statusChamado, dataAbertura, sala_id FROM DBCinema.TBChamadosTec";
+ 
+        if ( !where.isEmpty() ) 
+        {
+			cmd += " WHERE " + where;
+		}
+
+		ResultSet rs = null;
+
+		try 
+        {
+			rs = dbLink.executeQuery( cmd );
+		} 
+        catch ( SQLException e ) 
+        {
+			e.printStackTrace();
+		}
+        
+		return rs;
+	} 
+}
