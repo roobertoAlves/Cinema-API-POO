@@ -1,0 +1,12 @@
+@startuml ticketOperator
+actor "Operador de Bilheteria" as OB
+rectangle Sistema {
+  OB --> (Vender ingressos)
+  OB --> (Selecionar poltrona para cliente)
+  OB --> (Emitir ingresso)
+  OB --> (Cancelar venda)
+  OB --> (Emitir reembolso)
+  OB --> (Verificar ocupação de sala)
+  OB --> (Emitir relatórios de vendas)
+}
+@enduml

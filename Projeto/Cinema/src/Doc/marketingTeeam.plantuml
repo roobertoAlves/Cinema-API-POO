@@ -1,0 +1,8 @@
+@startuml Marketing
+actor "Marketing/Publicidade" as MKT
+rectangle Sistema {
+  MKT --> (Criar campanhas)
+  MKT --> (Distribuir material promocional)
+  MKT --> (Emitir relatórios de impacto)
+}
+@enduml

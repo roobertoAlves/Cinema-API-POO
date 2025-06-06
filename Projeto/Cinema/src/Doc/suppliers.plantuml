@@ -1,0 +1,8 @@
+@startuml Fornecedores
+actor "Fornecedor" as F
+rectangle Sistema {
+  F --> (Entregar produtos ou equipamentos)
+  F --> (Emitir nota fiscal)
+  F --> (Oferecer suporte externo)
+}
+@enduml

@@ -1,0 +1,15 @@
+@startuml Client
+actor Cliente
+rectangle Sistema {
+  Cliente --> (Visualizar filmes em cartaz)
+  Cliente --> (Escolher sessão e poltrona)
+  Cliente --> (Reservar poltrona)
+  Cliente --> (Comprar ingresso)
+  Cliente --> (Avaliar filme assistido)
+  Cliente --> (Enviar feedback)
+  Cliente --> (Criar e editar perfil)
+  Cliente --> (Acompanhar pontos de fidelidade)
+  Cliente --> (Visualizar promoções e cupons)
+  Cliente --> (Comprar produtos)
+}
+@enduml

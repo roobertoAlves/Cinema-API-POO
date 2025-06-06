@@ -1,0 +1,9 @@
+@startuml it
+actor "Suporte Técnico" as ST
+rectangle Sistema {
+  ST --> (Monitorar servidores)
+  ST --> (Atualizar sistemas)
+  ST --> (Gerenciar rede e Wi-Fi)
+  ST --> (Verificar sistemas de venda)
+}
+@enduml

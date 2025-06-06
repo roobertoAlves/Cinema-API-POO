@@ -1,0 +1,10 @@
+@startuml maintenanceTeam
+actor "Equipe de Manutenção" as EM
+rectangle Sistema {
+  EM --> (Abrir chamado técnico)
+  EM --> (Atualizar status do chamado)
+  EM --> (Registrar manutenção corretiva)
+  EM --> (Registrar manutenção preventiva)
+  EM --> (Fazer checklist de equipamentos)
+}
+@enduml
