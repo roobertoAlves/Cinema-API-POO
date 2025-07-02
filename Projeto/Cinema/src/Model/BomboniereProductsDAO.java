@@ -36,7 +36,10 @@ public class BomboniereProductsDAO
                     + "nome, "
                     + "preco, "
                     + "estoqueDisponivel) ";
-                cmd +=  products.getIdProduct() +"', '" + products.getIdProduct() +
+                cmd +=  products.getIdProduct() +"', '" + 
+						products.getName() +"', '" +
+						products.getPrice() +"', '" +
+						products.getAvailability() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -68,7 +71,8 @@ public class BomboniereProductsDAO
 
 			if ( products.getIdProduct() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBProdutosB WHERE id_produto = '" + products.getIdProduct() + "'";
+                String cmd = "DELETE FROM DBCinema.TBProdutosB"; 
+					   cmd += "WHERE id_produto = '" + products.getIdProduct() + "'";
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

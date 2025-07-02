@@ -37,7 +37,11 @@ public class MarketingDAO
                     + "dataInicioCampanha, "
                     + "dataFimCampanha, "
                     + "impactoCampanha) ";
-                cmd +=  marketing.getIdCampaign() +"', '" + marketing.getIdCampaign() +
+                cmd +=  marketing.getIdCampaign() +"', '" +
+						marketing.getCampaignName() +"', '" +
+						marketing.getStartCampaign() +"', '" +
+						marketing.getEndCampaign() +"', '" +
+						marketing.getCampaignImpact() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +73,8 @@ public class MarketingDAO
 
 			if ( marketing.getIdCampaign() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBMarketing WHERE id_campanha = " + marketing.getIdCampaign();
+                String cmd = "DELETE FROM DBCinema.TBMarketing";
+					   cmd += "WHERE id_campanha = " + marketing.getIdCampaign();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

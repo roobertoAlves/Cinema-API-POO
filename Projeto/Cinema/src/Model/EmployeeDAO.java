@@ -37,7 +37,12 @@ public class EmployeeDAO
                     + "cpf, "
                     + "email, "
                     + "telefone) ";
-                cmd +=  employee.getIdEmployee() +"', '" + employee.getIdEmployee() +
+                cmd +=  employee.getIdEmployee() +"', '" + 
+						employee.getName() +"', '" + 
+						employee.getPosition() +"', '" + 
+						employee.getCpf() +"', '" +
+						employee.getEmail() +"', '" + 
+						employee.getPhone() + 
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +74,8 @@ public class EmployeeDAO
 
 			if ( employee.getIdEmployee() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBFuncionarios WHERE id_funcionario = " + employee.getIdEmployee();
+                String cmd = "DELETE FROM DBCinema.TBFuncionarios";
+					   cmd += "WHERE id_funcionario = " + employee.getIdEmployee();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

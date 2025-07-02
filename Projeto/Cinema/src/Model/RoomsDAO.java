@@ -41,7 +41,13 @@ public class RoomsDAO
                         + "poltronas) "
                         + " values ('";
                         
-                    cmd +=  rooms.getRoomId() +"', '" + rooms.getRoomId() +
+                    cmd +=  rooms.getRoomId() +"', '" +
+						rooms.getRoomNumber() +"', '" +
+						rooms.getRoomMaxCapacity() +"', '" +
+						rooms.getRoomCurrentCapacity() +"', '" +
+						rooms.getRoomStatus() +"', '" +
+						rooms.getRoomType() +"', '" +
+						rooms.getSeats() +
                     ")'" ;
 							
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -73,7 +79,9 @@ public class RoomsDAO
 
 			if (rooms.getRoomId() > 0) 
             {
-				String cmd =  " DELETE FROM DBCinema.TBSalas " + " WHERE id_sala = " + rooms.getRoomId();
+				String cmd =  " DELETE FROM DBCinema.TBSalas";
+					   cmd += " WHERE id_sala = " + rooms.getRoomId();
+
 				
 				linesAfected = dbLink.executeUpdate( cmd );
 

@@ -37,7 +37,11 @@ public class MoviesCommentsDAO
 					+ "filme_id, "
 					+ "comentario, "
 					+ "dataComentario) ";
-                cmd +=  comments.getIdComementary() +"', '" + comments.getIdComementary() +
+                cmd +=  comments.getIdComementary() +"', '" + 
+						comments.getClientId() +"', '" +
+						comments.getMovieId() +"', '" +
+						comments.getIdComementary() +"', '" +
+						comments.getCommentDate() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +73,8 @@ public class MoviesCommentsDAO
 
 			if ( comments.getIdComementary() > 0 ) 
             {
-				String cmd = "DELETE FROM DBCinema.TBComentariosFilmes WHERE id_comentario = " + comments.getIdComementary();
+				String cmd = "DELETE FROM DBCinema.TBComentariosFilmes";
+					   cmd += "WHERE id_comentario = " + comments.getIdComementary();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

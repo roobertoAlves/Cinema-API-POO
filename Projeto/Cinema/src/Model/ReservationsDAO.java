@@ -37,7 +37,11 @@ public class ReservationsDAO
                     + "sessao_id, "
                     + "poltrona, "
                     + "dataReserva) ";
-                cmd +=  reservations.getIdReservation() +"', '" + reservations.getIdReservation() +
+                cmd +=  reservations.getIdReservation() +"', '" + 
+						reservations.getClientId() +"', '" +
+						reservations.getSessionId() +"', '" +
+						reservations.getSeatNumber() +"', '" +
+						reservations.getReservationDate() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +73,8 @@ public class ReservationsDAO
 
 			if ( reservations.getIdReservation() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBReservas WHERE id_reserva = " + reservations.getIdReservation();
+                String cmd = "DELETE FROM DBCinema.TBReservas"; 
+					   cmd += "WHERE id_reserva = " + reservations.getIdReservation();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

@@ -37,7 +37,11 @@ public class TechRequestDAO
                     + "statusChamado, "
                     + "dataAbertura, "
                     + "sala_id) ";
-                cmd +=  request.getIdRequest() +"', '" + request.getIdRequest() +
+                cmd +=  request.getIdRequest() +"', '" + 
+						request.getDescription() +"', '" +
+						request.getStatus() +"', '" +
+						request.getOpenData() +"', '" +
+						request.getRoomId() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +73,8 @@ public class TechRequestDAO
 
 			if ( request.getIdRequest() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBChamadosTec WHERE id_chamado = " + request.getIdRequest();
+                String cmd = "DELETE FROM DBCinema.TBChamadosTec";
+					   cmd += "WHERE id_chamado = " + request.getIdRequest();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

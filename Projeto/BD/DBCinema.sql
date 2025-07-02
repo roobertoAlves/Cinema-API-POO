@@ -182,7 +182,7 @@ CREATE TABLE TBComentariosFilmes (
     cliente_id INT,
     filme_id INT,
     comentario TEXT,
-    avaliacao TINYINT CHECK (nota BETWEEN 0 AND 10),
+    avaliacao TINYINT CHECK (avaliacao BETWEEN 0 AND 10),
     dataComentario DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES TBClientes(id_cliente),
     FOREIGN KEY (filme_id) REFERENCES TBFilmes(id_filme)

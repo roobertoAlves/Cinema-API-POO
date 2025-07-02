@@ -38,7 +38,12 @@ public class MaintenanceDAO
                     + "dataInicio, "
                     + "dataFim, "
                     + "funcionario_id) ";
-                cmd +=  maintenance.getIdMaintenance() +"', '" + maintenance.getIdMaintenance() +
+                cmd +=  maintenance.getIdMaintenance() +"', '" +
+						maintenance.getRoomId() +"', '" +
+						maintenance.getDescription() +"', '" +
+						maintenance.getStartDate() +"', '" +
+						maintenance.getEndDate() +"', '" +
+						maintenance.getEmployeeId() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -70,7 +75,8 @@ public class MaintenanceDAO
 
 			if ( maintenance.getIdMaintenance() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBManutencao WHERE id_manutencao = " + maintenance.getIdMaintenance();
+                String cmd = "DELETE FROM DBCinema.TBManutencao";
+					   cmd += "WHERE id_manutencao = " + maintenance.getIdMaintenance();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

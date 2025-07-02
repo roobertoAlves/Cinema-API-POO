@@ -40,7 +40,14 @@ public class ClientsDAO
                     + "telefone, "
                     + "perfilFidelidade, "
                     + "pontos) ";
-                cmd +=  client.getIdClient() +"', '" + client.getIdClient() +
+                cmd +=  client.getIdClient() +"', '" +
+				 		client.getName()+"', '" +
+				 		client.getEmail()+"', '" +
+						client.getPassword()+"', '" +
+						client.getCpf()+"', '" +
+						client.getPhone()+"', '" +
+						client.getLoyaltyProfile()+"', '" +
+						client.getPoints() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -72,7 +79,8 @@ public class ClientsDAO
 
 			if ( client.getIdClient() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBClientes WHERE id_cliente = " + client.getIdClient();
+                String cmd = "DELETE FROM DBCinema.TBClientes";
+						cmd += "WHERE id_cliente = " + client.getIdClient();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

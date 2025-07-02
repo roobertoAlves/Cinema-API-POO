@@ -37,7 +37,12 @@ public class MovieSessionsDAO
                     + "sala_id, "
                     + "horarioInicio, "
                     + "duracaoFilme) ";
-                cmd +=  sessions.getIdSession() +"', '" + sessions.getIdSession() +
+                cmd +=  sessions.getIdSession() +"', '" + 
+						sessions.getMovieId() +"', '" +
+						sessions.getRoomId() +"', '" +
+						sessions.getStartTime() +"', '" +
+						sessions.getMovieDuration() +
+
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +74,8 @@ public class MovieSessionsDAO
 
 			if ( sessions.getIdSession() > 0 ) 
             {
-                String cmd = " DELETE FROM DBCinema.TBSessoes " + " WHERE id_sessao = " + sessions.getIdSession();
+                String cmd = " DELETE FROM DBCinema.TBSessoes ";
+					   cmd += " WHERE id_sessao = " + sessions.getIdSession();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

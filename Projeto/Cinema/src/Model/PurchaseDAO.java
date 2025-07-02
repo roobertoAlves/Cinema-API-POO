@@ -37,7 +37,11 @@ public class PurchaseDAO
                     + "funcionario_id, "
                     + "dataCompra, "
                     + "valorTotal) ";
-                cmd +=  purchase.getIdPurchase() +"', '" + purchase.getIdPurchase() +
+                cmd +=  purchase.getIdPurchase() +"', '" +
+						purchase.getClientId() +"', '" +
+						purchase.getEmployeeId() +"', '" +
+						purchase.getPurchaseDate() +"', '" +
+						purchase.getTotalValue() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -69,7 +73,8 @@ public class PurchaseDAO
 
 			if ( purchase.getIdPurchase() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBCompras WHERE id_compra = " + purchase.getIdPurchase();
+                String cmd = "DELETE FROM DBCinema.TBCompras";
+					   cmd += "WHERE id_compra = " + purchase.getIdPurchase();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 

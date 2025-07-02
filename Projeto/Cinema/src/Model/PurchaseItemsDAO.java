@@ -37,7 +37,11 @@ public class PurchaseItemsDAO
                     + "produto_id, "
                     + "quantidade, "
                     + "precoUnitario) ";
-                cmd +=  items.getIdItem() +"', '" + items.getIdItem() +
+                cmd +=  items.getIdItem() +"', '" + 
+						items.getPurchaseId() +"', '" +
+						items.getProductId() +"', '" +
+						items.getQuantity() +"', '" +
+						items.getUnitPrice() +
                     ")'" ;
 
 				linesAfected = dbLink.executeUpdate(cmd);
@@ -69,7 +73,8 @@ public class PurchaseItemsDAO
 
 			if ( items.getIdItem() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBItensCompra WHERE id_item = " + items.getIdItem();
+                String cmd = "DELETE FROM DBCinema.TBItensCompra";
+					   cmd += "WHERE id_item = " + items.getIdItem();
 
 				linesAfected = dbLink.executeUpdate(cmd);
 

@@ -1,0 +1,11 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\activation.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\gson-2.8.6.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\gson-2.8.6-javadoc.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\mail.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\mysql-connector-java-5.1.34-bin.jar",
+        "d:\\A_K_I\\Documents\\IFSP\\IFSP-GRU\\POO\\Libs\\libs\\mysql-connector-java-8.0.17.jar"
+    ]
+}

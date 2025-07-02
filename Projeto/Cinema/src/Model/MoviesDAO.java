@@ -44,7 +44,16 @@ public class MoviesDAO
                         + "distribuidor) "
                         + " values ('";
 
-					cmd +=  movie.getMovieId() +"', '" + movie.getMovieId() +
+					cmd +=  movie.getMovieId() +"', '" +
+						movie.getMovieTitle() +"', '" +
+						movie.getMovieRating() +"', '" +
+						movie.getMovieDuration() +"', '" +
+						movie.getMovieType() +"', '" +
+						movie.getMovieLanguage() +"', '" +
+						movie.getMovieDubbing() +"', '" +
+						movie.getMovieSubtitle() +"', '" +
+						movie.getMovieDistributor() +
+						
                     ")'" ;
 							
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -76,7 +85,8 @@ public class MoviesDAO
 
 			if ( movie.getMovieId() > 0 ) 
             {
-				String cmd =  " DELETE FROM DBCinema.TBFilmes " + " WHERE id_filme = " + movie.getMovieId();
+				String cmd =  " DELETE FROM DBCinema.TBFilmes ";
+					   cmd += " WHERE id_filme = " + movie.getMovieId();
 				
 				linesAfected = dbLink.executeUpdate( cmd );
 
