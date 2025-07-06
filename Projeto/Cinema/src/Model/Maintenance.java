@@ -12,7 +12,7 @@ public class Maintenance
     private String endDate;
     private int employeeId;
 
-    private String tableName = "TBManutencao";
+    private String tableName = "tbmanutencao";
     private String fieldsName = "id_manutencao, sala_id, descricao, dataInicio, dataFim, funcionario_id";
     private String fieldKey = "id_manutencao";
 

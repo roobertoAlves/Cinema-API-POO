@@ -13,7 +13,7 @@ public class MovieTickets
     private double price;
     private String ticketType;
 
-    private String tableName = "TBIIngressos";
+    private String tableName = "tbingressos";
     private String fieldsName = "id_ingresso, sessao_id, cliente_id, poltrona, valor, tipoIngresso";
     private String fieldKey = "id_ingresso";
 

@@ -31,18 +31,12 @@ public class PurchaseDAO
 
 			if ( purchase.getIdPurchase() > 0 ) 
             {
-               String cmd = "INSERT INTO DBCinema.TBCompras ( "
-                    + "id_compra, "
-                    + "cliente_id, "
-                    + "funcionario_id, "
-                    + "dataCompra, "
-                    + "valorTotal) ";
-                cmd +=  purchase.getIdPurchase() +"', '" +
-						purchase.getClientId() +"', '" +
-						purchase.getEmployeeId() +"', '" +
-						purchase.getPurchaseDate() +"', '" +
-						purchase.getTotalValue() +
-                    ")'" ;
+               String cmd = "INSERT INTO bdcinema.tbcompras (cliente_id, funcionario_id, " + 
+            		   		"dataCompra, valorTotal) VALUES ("
+            		   		+ purchase.getClientId() + ", "
+            		   		+ purchase.getEmployeeId() + ", '"
+            		   		+ purchase.getPurchaseDate() + "', "
+            		   		+ purchase.getTotalValue() + ")";
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -62,7 +56,33 @@ public class PurchaseDAO
 
 	public int update( Purchase purchase ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( purchase.getIdPurchase() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbcompras SET" + 
+							 "cliente_id = " + purchase.getClientId() +
+							 ", funcionario_id = " + purchase.getEmployeeId() +
+							 ", dataCompra = '" + purchase.getPurchaseDate() +
+							 "', valorTotal = " + purchase.getTotalValue() +
+							 " WHERE id_compra = " + purchase.getIdPurchase();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( Purchase purchase ) 
@@ -73,7 +93,7 @@ public class PurchaseDAO
 
 			if ( purchase.getIdPurchase() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBCompras";
+                String cmd = "DELETE bdcinema.tbcompras";
 					   cmd += "WHERE id_compra = " + purchase.getIdPurchase();
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -95,7 +115,8 @@ public class PurchaseDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_compra, cliente_id, funcionario_id, dataCompra, valorTotal FROM DBCinema.TBCompras";
+        String cmd = "SELECT id_compra, cliente_id, funcionario_id, dataCompra," + 
+        			 "valorTotal FROM bdcinema.tbcompras";
         
         if ( !where.isEmpty() ) 
         {

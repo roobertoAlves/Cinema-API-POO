@@ -11,7 +11,7 @@ public class PurchaseItems
     private int quantity;
     private double unitPrice;
 
-    private String tableName = "TBItensCompra";
+    private String tableName = "tbitenscompra";
     private String fieldsName = "id_item, compra_id, produto_id, quantidade, precoUnitario";
     private String fieldKey = "id_item";
 

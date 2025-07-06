@@ -9,7 +9,7 @@ public class MovieGender
     private String genderName;
     private String genderDescription;   
     
-    private String tableName = "TBGeneros";
+    private String tableName = "tbgeneros";
     private String fieldsName = "id_genero, nomeGenero, descricaoGenero";
     private String fieldKey = "id_genero";
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );
@@ -105,5 +105,4 @@ public String toString()
     {
         this.genderDescription = genderDescription;
     }
-
 }

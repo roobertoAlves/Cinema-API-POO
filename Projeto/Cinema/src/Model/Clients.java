@@ -15,7 +15,7 @@ public class Clients
     private String loyaltyProfile;
     private int points = 0;
 
-    private String tableName = "TBClientes";
+    private String tableName = "tbclientes";
     private String fieldsName = "id_cliente, nome, email, senha, cpf, telefone, perfilFidelidade, pontos";
     private String fieldKey = "id_cliente";
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );

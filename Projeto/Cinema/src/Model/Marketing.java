@@ -11,8 +11,8 @@ public class Marketing
     private String endCampaign;
     private int campaignImpact;
 
-    private String tableName = "TBMarketing";
-    private String fieldsName = "id_campanha, nomeCampanha, dataInicioCampanha, dataFimCampanha, impactoCampanha";
+    private String tableName = "tbmarketing";
+    private String fieldsName = "id_campanha, nomeCampanha, inicioCampanha, fimCampanha, impactoCampanha";
     private String fieldKey = "id_campanha";
 
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );

@@ -1,0 +1,8 @@
+@startuml cleaningTeam
+actor "Equipe de Limpeza" as EL
+rectangle Sistema {
+  EL --> (Registrar limpeza realizada)
+  EL --> (Agendar manutenção preventiva)
+  EL --> (Atualizar status da sala)
+}
+@enduml

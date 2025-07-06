@@ -1,125 +1,150 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class LoginScreen extends JFrame {
+    private JTextField userField;
+    private JPasswordField passField;
+    private JButton loginButton;
 
-    public LoginScreen() 
-    {
-        setTitle("Cinema - Login");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+    public LoginScreen() {
+        setTitle("Login - Sistema de Cinema");
+        setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setUndecorated(false);
-        setLayout(null);
+        setLocationRelativeTo(null);
+        setIconImage(Toolkit.getDefaultToolkit().getImage("src/Assets/cineplay.png"));
 
-   
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(10, 10, 30)); 
-        panel.setLayout(null);
-        setContentPane(panel);
+        JPanel panel = new JPanel(null);
+        panel.setBackground(new Color(18, 18, 30));
 
-        JLabel titleLabel = new JLabel("🎬 Cinema");
-        titleLabel.setForeground(new Color(180, 100, 255));
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 64));
-        titleLabel.setBounds(720, 120, 500, 80);
-        panel.add(titleLabel);
+        int formWidth = 350;
+        int formHeight = 300;
+        int startX = (800 - formWidth) / 2;
+        int startY = (600 - formHeight) / 2;
 
-        JLabel subtitleLabel = new JLabel("Bem-vindo ao universo do cinema!");
-        subtitleLabel.setForeground(Color.LIGHT_GRAY);
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-        subtitleLabel.setBounds(680, 200, 600, 40);
-        panel.add(subtitleLabel);
+        JLabel title = new JLabel("🎬 CinePlay");
+        title.setFont(new Font("SansSerif", Font.BOLD, 48));
+        title.setForeground(new Color(160, 64, 255));
+        title.setBounds((800 - 300) / 2, startY - 120, 300, 60);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(title);
 
-    
         JLabel userLabel = new JLabel("Usuário:");
+        userLabel.setBounds(startX, startY, 100, 30);
+        userLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         userLabel.setForeground(Color.WHITE);
-        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        userLabel.setBounds(740, 300, 400, 30);
         panel.add(userLabel);
 
-        JTextField userField = new JTextField();
-        userField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        userField.setBounds(740, 340, 440, 40);
-        userField.setBackground(new Color(30, 30, 60));
+        userField = new JTextField();
+        userField.setBounds(startX + 110, startY, 220, 35);
+        userField.setBackground(new Color(40, 40, 60));
         userField.setForeground(Color.WHITE);
+        userField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         userField.setCaretColor(Color.WHITE);
+        userField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         panel.add(userField);
 
-
         JLabel passLabel = new JLabel("Senha:");
+        passLabel.setBounds(startX, startY + 60, 100, 30);
+        passLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         passLabel.setForeground(Color.WHITE);
-        passLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        passLabel.setBounds(740, 400, 400, 30);
         panel.add(passLabel);
 
-        JPasswordField passField = new JPasswordField();
-        passField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        passField.setBounds(740, 440, 440, 40);
-        passField.setBackground(new Color(30, 30, 60));
+        passField = new JPasswordField();
+        passField.setBounds(startX + 110, startY + 60, 220, 35);
+        passField.setBackground(new Color(40, 40, 60));
         passField.setForeground(Color.WHITE);
+        passField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         passField.setCaretColor(Color.WHITE);
+        passField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         panel.add(passField);
 
-
-        JButton loginButton = new JButton("Entrar");
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        loginButton.setBackground(new Color(180, 100, 255));
-        loginButton.setForeground(Color.BLACK);
+        loginButton = new JButton("Entrar");
+        loginButton.setBounds(startX + 110, startY + 120, 120, 40);
         loginButton.setFocusPainted(false);
-        loginButton.setBounds(740, 520, 440, 50);
-        loginButton.setBorder(BorderFactory.createLineBorder(new Color(140, 60, 220), 2));
-        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.setBackground(new Color(160, 64, 255));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        loginButton.setBorder(BorderFactory.createLineBorder(new Color(130, 30, 200), 2, true));
+        loginButton.setContentAreaFilled(false);
         loginButton.setOpaque(true);
-
-
-        loginButton.setUI(new javax.swing.plaf.basic.BasicButtonUI() 
-        {
-            @Override
-            public void installUI(JComponent c) 
-            {
-                super.installUI(c);
-                c.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-                c.setBackground(new Color(180, 100, 255));
-            }
-        });
-
+        loginButton.setBorder(new RoundedBorder(20)); // Borda arredondada
         panel.add(loginButton);
 
+        // Hover effect
+        loginButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                loginButton.setBackground(new Color(180, 90, 255));
+            }
 
-        loginButton.addActionListener(new ActionListener() 
-        {
-            public void actionPerformed(ActionEvent e) 
-            {
-                String user = userField.getText();
-                String password = new String(passField.getPassword());
+            @Override
+            public void mouseExited(MouseEvent e) {
+                loginButton.setBackground(new Color(160, 64, 255));
+            }
 
-                if (user.equals("admin") && password.equals("1234")) 
-                {
-                    JOptionPane.showMessageDialog(null, "Login bem-sucedido! 🎬");
+            @Override
+            public void mousePressed(MouseEvent e) {
+                loginButton.setBackground(new Color(120, 30, 200));
+            }
 
-                } 
-                else 
-                {
-                    JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos.");
-                }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                loginButton.setBackground(new Color(180, 90, 255));
             }
         });
 
+        loginButton.addActionListener(e -> {
+            String username = userField.getText();
+            String password = new String(passField.getPassword());
 
-        JLabel footer = new JLabel("©");
-        footer.setForeground(new Color(120, 120, 120));
-        footer.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        footer.setBounds(720, 1000, 500, 30);
-        panel.add(footer);
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
+            } else if (username.equals("admin") && password.equals("admin")) {
+                JOptionPane.showMessageDialog(null, "Login de administrador bem-sucedido!");
+                new AdminHomeScreen();
+                dispose();
+            } else if (username.equals("cli") && password.equals("cli")) {
+                JOptionPane.showMessageDialog(null, "Login de cliente bem-sucedido!");
+                new ClientHomeScreen();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
+            }
+        });
 
+        add(panel);
         setVisible(true);
     }
 
-    public static void main(String[] args)
-     {
+    // Classe de borda arredondada
+    class RoundedBorder implements Border {
+        private int radius;
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        public Insets getBorderInsets(Component c) {
+            return new Insets(radius, radius, radius, radius);
+        }
+
+        public boolean isBorderOpaque() {
+            return false;
+        }
+
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(new Color(130, 30, 200));
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
+    }
+
+    public static void main(String[] args) {
         new LoginScreen();
     }
 }

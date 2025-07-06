@@ -13,7 +13,7 @@ public class TechRequest
 
     private String fieldsName = "id_chamado, descricao, statusChamado, dataAbertura, sala_id";
     private String fieldKey = "id_chamado";
-    private String tableName = "TBChamadosTec";
+    private String tableName = "tbchamadostec";
 
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );
 

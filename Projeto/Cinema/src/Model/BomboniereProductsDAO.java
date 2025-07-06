@@ -10,107 +10,123 @@ public class BomboniereProductsDAO
 {
     private Statement dbLink = null;
 
-	public BomboniereProductsDAO() 
+    public BomboniereProductsDAO() 
     {
-		try 
+        try 
         {
-			this.dbLink = new DBConnection().getConnection().createStatement();
-		} 
+            this.dbLink = new DBConnection().getConnection().createStatement();
+        } 
         catch (SQLException e) 
         {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
+    }
 
-	}
-
-	public int insert(  BomboniereProducts products ) 
+    public int insert(BomboniereProducts product) 
     {
-		try 
+        try 
         {
-			int linesAfected = 0;
+            int linesAffected = 0;
 
-			if ( products.getIdProduct() > 0 ) 
+            if (product.getIdProduct() > 0) 
             {
-                String cmd = "INSERT INTO DBCinema.TBProdutosB ( "
-                    + "id_produto, "
-                    + "nome, "
-                    + "preco, "
-                    + "estoqueDisponivel) ";
-                cmd +=  products.getIdProduct() +"', '" + 
-						products.getName() +"', '" +
-						products.getPrice() +"', '" +
-						products.getAvailability() +
-                    ")'" ;
+                String cmd = "INSERT INTO bdcinema.tbprodutosb (id_produto, nome, preco," + 
+                		 	 "estoqueDisponivel) VALUES ("
+                    + product.getIdProduct() + ", '"
+                    + product.getName() + "', "
+                    + product.getPrice() + ", '"
+                    + product.getAvailability() + "')";
 
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-			}
-            else
+                linesAffected = dbLink.executeUpdate(cmd);
+                return linesAffected;
+            } 
+            else 
             {
+                return 0;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int update(BomboniereProducts product) 
+    {
+        try 
+		{
+			int linesAffected = 0;
+
+			if (product.getIdProduct() > 0) 
+			{
+				String cmd = "UPDATE bdcinema.tbprodutosb SET" + 
+					"nome = '" + product.getName() + "', " +
+					"preco = " + product.getPrice() + ", " +
+					"estoqueDisponivel = '" + product.getAvailability() + "' " +
+					"WHERE id_produto = " + product.getIdProduct();
+
+				linesAffected = dbLink.executeUpdate(cmd);
+				return linesAffected;
+			} 
+			else 
+			{
 				return 0;
 			}
 		} 
-        catch (SQLException e) 
-        {
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
 			return 0;
-		}		
-	}
+		}
+    }
 
-	public int update( BomboniereProducts products ) 
+    public int delete(BomboniereProducts product) 
     {
-		return 0;
-	}
-
-	public int delete( BomboniereProducts products ) 
-    {
-		try 
+        try 
         {
-			int linesAfected = 0;
+            int linesAffected = 0;
 
-			if ( products.getIdProduct() > 0 ) 
+            if (product.getIdProduct() > 0) 
             {
-                String cmd = "DELETE FROM DBCinema.TBProdutosB"; 
-					   cmd += "WHERE id_produto = '" + products.getIdProduct() + "'";
+                String cmd = "DELETE FROM bdcinema.tbprodutosb";
+                	   cmd += "WHERE id_produto = " + product.getIdProduct();
 
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-
-			}
-            else
+                linesAffected = dbLink.executeUpdate(cmd);
+                return linesAffected;
+            } 
+            else 
             {
-				return 0;
-			}
-		} 
+                return 0;
+            }
+        } 
         catch (SQLException e) 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	public ResultSet list( String where ) 
+    public ResultSet list(String where) 
     {
-        String cmd = "SELECT id_produto, nome, preco, estoqueDisponivel FROM DBCinema.TBProdutosB";
- 
-        if ( !where.isEmpty() ) 
-        {
-			cmd += " WHERE " + where;
-		}
+        String cmd = "SELECT id_produto, nome, preco, estoqueDisponivel FROM bdcinema.tbprodutosb";
 
-		ResultSet rs = null;
+        if (!where.isEmpty()) 
+        {
+            cmd += " WHERE " + where;
+        }
 
-		try 
+        ResultSet rs = null;
+
+        try 
         {
-			rs = dbLink.executeQuery( cmd );
-		} 
-        catch ( SQLException e ) 
+            rs = dbLink.executeQuery(cmd);
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-		}
-        
-		return rs;
-	} 
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
 }

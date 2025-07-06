@@ -1,0 +1,15 @@
+@startuml generalManager
+actor "Gerente Geral" as GG
+rectangle Sistema {
+  GG --> (Gerenciar fluxo de caixa)
+  GG --> (Emitir relatórios financeiros)
+  GG --> (Planejar orçamento)
+  GG --> (Gerenciar estoque central)
+  GG --> (Controlar compras e consumo)
+  GG --> (Gerenciar funcionários)
+  GG --> (Distribuir tarefas)
+  GG --> (Avaliar desempenho dos funcionários)
+  GG --> (Gerenciar contratos com fornecedores)
+  GG --> (Emitir relatórios de desempenho)
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml ITAdmin
+actor "Administrador de TI" as TI
+rectangle Sistema {
+  TI --> (Gerenciar usuários e permissões)
+  TI --> (Realizar backups)
+  TI --> (Recuperar dados)
+  TI --> (Atualizar sistema)
+  TI --> (Integrar novos sistemas)
+}
+@enduml

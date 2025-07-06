@@ -13,7 +13,7 @@ public class Rooms
     private String roomType;
     private int seats;
 
-    private String  tableName 	= "TBSalas";
+    private String  tableName 	= "tbsalas";
     private String  fieldsName 	= "id_sala, numeroSala, capacidadeMaxima, capacidadeAtual, statusSala, tipoSala, poltronas";
     private String  fieldKey  	= "id_sala";
 

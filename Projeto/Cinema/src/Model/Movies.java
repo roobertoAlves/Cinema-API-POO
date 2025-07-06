@@ -15,7 +15,7 @@ public class Movies
     private String movieSubtitle;
     private String movieDistributor;
 
-    private String tableName = "TBFilmes";
+    private String tableName = "tbfilmes";
     private String fieldsName = "id_filme, titulo, classificacao, duracao, tipoFilme, idiomaFilme, dublagem, legenda, distribuidor";
     private String fieldKey = "id_filme";
 

@@ -31,15 +31,13 @@ public class MovieTicketsDAO
 
 			if ( tickets.getIdTicket() > 0 ) 
             {
-                String cmd = "INSERT INTO DBCinema.TBIIngressos ( "
-                    + "id_ingresso, "
-                    + "sessao_id, "
-                    + "cliente_id, "
-                    + "poltrona, "
-                    + "valor, "
-                    + "tipoIngresso) ";
-                cmd +=  tickets.getIdTicket() +"', '" + tickets.getIdTicket() +
-                    ")'" ;
+                String cmd = "INSERT INTO dbcinema.tbingressos(sessao_id, cliente_id, poltrona," + 
+                			 "valor, tipoIngresso) VALUES(" 
+                		+ tickets.getSessionId() + ", " 
+            			+ tickets.getClientId() + ", " 
+                		+ tickets.getSeatNumber() + ", " 
+            			+ tickets.getPrice() + ", '"
+            			+ tickets.getTicketType() + ")'" ;
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -59,7 +57,34 @@ public class MovieTicketsDAO
 
 	public int update( MovieTickets tickets ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( tickets.getIdTicket() > 0 ) 
+			{
+				String cmd = "UPDATE dbcinema.tbingressos SET "
+						+ "sessao_id = " + tickets.getSessionId() + ", "
+						+ "cliente_id = " + tickets.getClientId() + ", "
+						+ "poltrona = " + tickets.getSeatNumber() + ", "
+						+ "valor = " + tickets.getPrice() + ", "
+						+ "tipoIngresso = '" + tickets.getTicketType() + "' "
+						+ "WHERE id_ingresso = " + tickets.getIdTicket();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( MovieTickets tickets ) 
@@ -70,7 +95,7 @@ public class MovieTicketsDAO
 
 			if ( tickets.getIdTicket() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBIngressos WHERE id_ingresso = " + tickets.getIdTicket();
+                String cmd = "DELETE FROM dbcinema.tbingressos WHERE id_ingresso = " + tickets.getIdTicket();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -91,7 +116,8 @@ public class MovieTicketsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_ingresso, sessao_id, cliente_id, poltrona, valor, tipoIngresso FROM DBCinema.TBIngressos";
+        String cmd = "SELECT id_ingresso, sessao_id, cliente_id, poltrona, valor, " +
+        		  	 "tipoIngresso FROM dbcinema.tbingressos";
  
         if ( !where.isEmpty() ) 
         {

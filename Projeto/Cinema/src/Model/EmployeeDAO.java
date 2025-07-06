@@ -30,20 +30,14 @@ public class EmployeeDAO
 
 			if ( employee.getIdEmployee() > 0 ) 
             {
-               String cmd = "INSERT INTO DBCinema.TBFuncionarios ( "
-                    + "id_funcionario, "
-                    + "nome, "
-                    + "cargo, "
-                    + "cpf, "
-                    + "email, "
-                    + "telefone) ";
-                cmd +=  employee.getIdEmployee() +"', '" + 
-						employee.getName() +"', '" + 
-						employee.getPosition() +"', '" + 
-						employee.getCpf() +"', '" +
-						employee.getEmail() +"', '" + 
-						employee.getPhone() + 
-                    ")'" ;
+               String cmd = "INSERT INTO bdcinema.tbfuncionarios (id_funcionario, nome, cargo, cpf, email, telefone) VALUES ("
+						+ employee.getIdEmployee() + ", '"
+						+ employee.getName() + "', '"
+						+ employee.getPosition() + "', '"
+						+ employee.getCpf() + "', '"
+						+ employee.getEmail() + "', '"
+						+ employee.getPhone() + "')";
+               
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -63,7 +57,34 @@ public class EmployeeDAO
 
 	public int update( Employee employee ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( employee.getIdEmployee() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbfuncionarios SET" 
+						+ "nome = '" + employee.getName() + "', "
+						+ "cargo = '" + employee.getPosition() + "', "
+						+ "cpf = '" + employee.getCpf() + "', "
+						+ "email = '" + employee.getEmail() + "', "
+						+ "telefone = '" + employee.getPhone() + "' "
+						+ "WHERE id_funcionario = " + employee.getIdEmployee();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( Employee employee ) 
@@ -74,7 +95,7 @@ public class EmployeeDAO
 
 			if ( employee.getIdEmployee() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBFuncionarios";
+                String cmd = "DELETE FROM bdcinema.tbfuncionarios";
 					   cmd += "WHERE id_funcionario = " + employee.getIdEmployee();
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -96,7 +117,7 @@ public class EmployeeDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_funcionario, nome, cargo, cpf, email, telefone FROM DBCinema.TBFuncionarios";
+        String cmd = "SELECT id_funcionario, nome, cargo, cpf, email, telefone FROM bdcinema.tbfuncionarios";
         
         if ( !where.isEmpty() ) 
         {

@@ -31,24 +31,16 @@ public class ClientsDAO
 
 			if ( client.getIdClient() > 0 ) 
             {
-               String cmd = "INSERT INTO DBCinema.TBClientes ( "
-                    + "id_cliente, "
-                    + "nome, "
-                    + "email, "
-                    + "senha, "
-                    + "cpf, "
-                    + "telefone, "
-                    + "perfilFidelidade, "
-                    + "pontos) ";
-                cmd +=  client.getIdClient() +"', '" +
-				 		client.getName()+"', '" +
-				 		client.getEmail()+"', '" +
-						client.getPassword()+"', '" +
-						client.getCpf()+"', '" +
-						client.getPhone()+"', '" +
-						client.getLoyaltyProfile()+"', '" +
-						client.getPoints() +
-                    ")'" ;
+               String cmd = "INSERT INTO bdcinema.tbclientes (id_cliente, nome, email, senha," + 
+            		   		"cpf, telefone, perfilFidelidade, pontos) VALUES ("
+               			+client.getIdClient() + "', '"
+				 		+client.getName() + "', '" 
+				 		+client.getEmail() + "', '" 
+						+client.getPassword() + "', '" 
+						+client.getCpf() + "', '" 
+						+client.getPhone() + "', '" 
+						+client.getLoyaltyProfile() + "', '" 
+						+client.getPoints() + "')";
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -68,7 +60,36 @@ public class ClientsDAO
 
 	public int update( Clients client ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( client.getIdClient() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbclientes SET" 
+						+ "nome = '" + client.getName() + "', "
+				 		+ "email = '" + client.getEmail() + "', "
+				 		+ "senha = '" + client.getPassword() + "', "
+						+ "cpf = '" + client.getCpf() + "', "
+						+ "telefone = '" + client.getPhone() + "', "
+						+ "perfilFidelidade = '" + client.getLoyaltyProfile() + "', "
+						+ "pontos = '" + client.getPoints() + "' "
+						+ "WHERE id_cliente = " + client.getIdClient();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( Clients client ) 
@@ -79,8 +100,8 @@ public class ClientsDAO
 
 			if ( client.getIdClient() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBClientes";
-						cmd += "WHERE id_cliente = " + client.getIdClient();
+                String cmd = "DELETE FROM bdcinema.tbclientes";
+					   cmd += "WHERE id_cliente = " + client.getIdClient();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -101,7 +122,8 @@ public class ClientsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_cliente, nome, email, senha, cpf, telefone, perfilFidelidade, pontos FROM DBCinema.TBClientes";
+        String cmd = "SELECT id_cliente, nome, email, senha, cpf, telefone," + 
+        			 "perfilFidelidade, pontos FROM bdcinema.tbclientes";
         
         if ( !where.isEmpty() ) 
         {

@@ -1,0 +1,10 @@
+@startuml Bomboniere
+actor "Operador de Bomboniere" as BO
+rectangle Sistema {
+  BO --> (Vender produto)
+  BO --> (Emitir comprovante de compra)
+  BO --> (Atualizar estoque de produto)
+  BO --> (Registrar perdas)
+  BO --> (Solicitar reposição)
+}
+@enduml

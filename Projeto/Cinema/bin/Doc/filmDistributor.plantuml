@@ -1,0 +1,8 @@
+@startuml filmDistributor
+actor "Distribuidor de Filmes" as DF
+rectangle Sistema {
+  DF --> (Enviar catálogo de lançamentos)
+  DF --> (Negociar contrato de exibição)
+  DF --> (Enviar material promocional)
+}
+@enduml

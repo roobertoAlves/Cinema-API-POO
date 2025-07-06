@@ -31,18 +31,13 @@ public class ReservationsDAO
 
 			if ( reservations.getIdReservation() > 0 ) 
             {
-                String cmd = "INSERT INTO DBCinema.TBReservas ( "
-                    + "id_reserva, "
-                    + "cliente_id, "
-                    + "sessao_id, "
-                    + "poltrona, "
-                    + "dataReserva) ";
-                cmd +=  reservations.getIdReservation() +"', '" + 
-						reservations.getClientId() +"', '" +
-						reservations.getSessionId() +"', '" +
-						reservations.getSeatNumber() +"', '" +
-						reservations.getReservationDate() +
-                    ")'" ;
+                String cmd = "INSERT INTO bdcinema.tbreservas (cliente_id, sessao_id," +
+                			 " poltrona, dataReserva) VALUES (" 
+                			 + reservations.getClientId() + ", "
+                			 + reservations.getSessionId() + ", " 
+                			 + reservations.getSeatNumber() + ", '"
+                			 + reservations.getReservationDate() + "')";
+                
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -62,7 +57,33 @@ public class ReservationsDAO
 
 	public int update( Reservations reservations ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( reservations.getIdReservation() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbreservas SET" +  
+							 "cliente_id = " + reservations.getClientId() +
+							 ", sessao_id = " + reservations.getSessionId() +
+							 ", poltrona = " + reservations.getSeatNumber() +
+							 ", dataReserva = '" + reservations.getReservationDate() + "'" +
+							 " WHERE id_reserva = " + reservations.getIdReservation();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( Reservations reservations ) 
@@ -73,7 +94,7 @@ public class ReservationsDAO
 
 			if ( reservations.getIdReservation() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBReservas"; 
+                String cmd = "DELETE FROM bdcinema.tbreservas"; 
 					   cmd += "WHERE id_reserva = " + reservations.getIdReservation();
 
 				linesAfected = dbLink.executeUpdate( cmd );
@@ -95,7 +116,7 @@ public class ReservationsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_reserva, cliente_id, sessao_id, poltrona, dataReserva FROM DBCinema.TBReservas";
+        String cmd = "SELECT id_reserva, cliente_id, sessao_id, poltrona, dataReserva FROM bdcinema.tbreservas";
  
         if ( !where.isEmpty() ) 
         {

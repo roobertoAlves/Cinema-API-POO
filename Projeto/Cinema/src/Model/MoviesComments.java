@@ -13,7 +13,7 @@ public class MoviesComments
     private int rating;
     private String commentDate;
 
-    private String tableName = "TBComentariosFilmes";
+    private String tableName = "tbcomentariosfilmes";
     private String fieldsName = "id_comentario, id_cliente, id_filme, comentario, avaliacao, dataComentario";
     private String fieldKey = "id_comentario";
 

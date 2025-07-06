@@ -13,7 +13,7 @@ public class Employee
     private String email;
     private String phone;
 
-    private String tableName = "TBFuncionarios";
+    private String tableName = "tbfuncionarios";
     private String fieldsName = "id_funcionario, nome, cargo, cpf, email, telefone";
     private String fieldKey = "id_funcionario";
     private DBQuery dbQuery = new DBQuery(tableName, fieldsName, fieldKey);

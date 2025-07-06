@@ -1,0 +1,13 @@
+@startuml programmingManager
+actor "Gerente de Programação" as GP
+rectangle Sistema {
+  GP --> (Gerenciar catálogo de filmes)
+  GP --> (Adicionar novo filme)
+  GP --> (Remover filme)
+  GP --> (Agendar sessões)
+  GP --> (Editar sessões)
+  GP --> (Atribuir salas às sessões)
+  GP --> (Controlar licenciamento de filmes)
+  GP --> (Emitir relatórios de sessões)
+}
+@enduml

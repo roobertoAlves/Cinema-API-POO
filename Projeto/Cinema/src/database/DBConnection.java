@@ -31,7 +31,7 @@ public class DBConnection
 	{
 		this.setHost	("localhost");
 		this.setPort	("3306");
-		this.setSchema	("DBCinema");
+		this.setSchema	("bdcinema");
 		this.setUser	("root");
 		this.setPassword(""); // XAMPP geralmente não tem senha para root
 		this.doConnection();

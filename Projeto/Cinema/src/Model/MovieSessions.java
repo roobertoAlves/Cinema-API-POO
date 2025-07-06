@@ -11,7 +11,7 @@ public class MovieSessions
     private String startTime;
     private String movieDuration;
 
-    private String tableName = "TBSessoes";
+    private String tableName = "tbsessoes";
     private String fieldsName = "id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme";
     private String fieldKey = "id_sessao";
 
@@ -31,9 +31,12 @@ public class MovieSessions
     }
     public MovieSessions( int movieId, int roomId, String startTime, String movieDuration ) 
     {
+        this.movieId = movieId;
+        this.roomId = roomId;
         this.startTime = startTime;
         this.movieDuration = movieDuration;
     }
+
 
     public int save() 
 	{
@@ -133,4 +136,3 @@ public class MovieSessions
     }
 
 }
-

@@ -31,18 +31,13 @@ public class PurchaseItemsDAO
 
 			if ( items.getIdItem() > 0 ) 
             {
-               String cmd = "INSERT INTO DBCinema.TBItensCompra ( "
-                    + "id_item, "
-                    + "compra_id, "
-                    + "produto_id, "
-                    + "quantidade, "
-                    + "precoUnitario) ";
-                cmd +=  items.getIdItem() +"', '" + 
-						items.getPurchaseId() +"', '" +
-						items.getProductId() +"', '" +
-						items.getQuantity() +"', '" +
-						items.getUnitPrice() +
-                    ")'" ;
+               String cmd = "INSERT INTO bdcinema.tbitenscompra (compra_id, produto_id, quantidade," + 
+            		   		"precoUnitario) VALUES (" 
+            		   + items.getPurchaseId() + ", " 
+            		   + items.getProductId() + ", "
+            		   + items.getQuantity() + ", "
+            		   + items.getUnitPrice() + ")";
+               
 
 				linesAfected = dbLink.executeUpdate(cmd);
 
@@ -62,7 +57,33 @@ public class PurchaseItemsDAO
 
 	public int update( PurchaseItems items ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( items.getIdItem() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbitenscompra SET "
+						+ "compra_id = " + items.getPurchaseId() + ", "
+						+ "produto_id = " + items.getProductId() + ", "
+						+ "quantidade = " + items.getQuantity() + ", "
+						+ "precoUnitario = " + items.getUnitPrice()
+						+ " WHERE id_item = " + items.getIdItem();
+
+				linesAfected = dbLink.executeUpdate(cmd);
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( PurchaseItems items ) 
@@ -73,7 +94,7 @@ public class PurchaseItemsDAO
 
 			if ( items.getIdItem() > 0 ) 
             {
-                String cmd = "DELETE FROM DBCinema.TBItensCompra";
+                String cmd = "DELETE FROM bdcinema.tbitenscompra";
 					   cmd += "WHERE id_item = " + items.getIdItem();
 
 				linesAfected = dbLink.executeUpdate(cmd);
@@ -95,7 +116,8 @@ public class PurchaseItemsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_item, compra_id, produto_id, quantidade, precoUnitario FROM DBCinema.TBItensCompra";
+        String cmd = "SELECT id_item, compra_id, produto_id, quantidade, precoUnitario" + 
+        			 "FROM bdcinema.tbitenscompra";
         
         if ( !where.isEmpty() )  
         {

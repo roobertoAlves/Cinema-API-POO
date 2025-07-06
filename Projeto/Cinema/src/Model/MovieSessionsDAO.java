@@ -3,117 +3,107 @@ package Model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import database.DBConnection;
 
+
+import database.DBConnection;
 
 public class MovieSessionsDAO 
 {
     private Statement dbLink = null;
 
-	public MovieSessionsDAO() 
+    public MovieSessionsDAO() 
     {
-		try 
+        try 
         {
-			this.dbLink = new DBConnection().getConnection().createStatement();
-		} 
-        catch ( SQLException e ) 
+            this.dbLink = new DBConnection().getConnection().createStatement();
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
+    }
 
-	}
-
-	public int insert(  MovieSessions sessions ) 
+    public int insert(MovieSessions session) 
     {
-		try 
+        try 
         {
-			int linesAfected = 0;
+            String cmd = "INSERT INTO bdcinema.tbsessoes (filme_id, sala_id, horarioInicio, "
+            		+ "duracaoFilme) VALUES ('" 
+            		+ session.getMovieId() + "', '"
+					+ session.getRoomId() + "', '"
+					+ session.getStartTime() + "', '"
+					+ session.getMovieDuration() + "')";
 
-			if ( sessions.getIdSession() > 0 ) 
+            int linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int update(MovieSessions session) 
+    {
+        try 
+        {
+            String cmd = "UPDATE bdcinema.tbsessoes SET "
+                    + "filme_id = '" + session.getMovieId() + "', "
+                    + "sala_id = '" + session.getRoomId() + "', "
+                    + "horarioInicio = '" + session.getStartTime() + "', "
+                    + "duracaoFilme = '" + session.getMovieDuration() + "' "
+                    + "WHERE id_sessao = " + session.getIdSession();
+
+            int linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int delete(MovieSessions session) 
+    {
+        try 
+        {
+            if (session.getIdSession() > 0) 
             {
-                String cmd = "INSERT INTO DBCinema.TBGeneros ( "
-                    + "id_sessao, "
-                    + "filme_id, "
-                    + "sala_id, "
-                    + "horarioInicio, "
-                    + "duracaoFilme) ";
-                cmd +=  sessions.getIdSession() +"', '" + 
-						sessions.getMovieId() +"', '" +
-						sessions.getRoomId() +"', '" +
-						sessions.getStartTime() +"', '" +
-						sessions.getMovieDuration() +
-
-                    ")'" ;
-
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-			}
-            else
+                String cmd = "DELETE FROM bdcinema.tbsessoes WHERE id_sessao = " + session.getIdSession();
+                int linesAffected = dbLink.executeUpdate(cmd);
+                return linesAffected;
+            } 
+            else 
             {
-				return 0;
-			}
-		} 
-        catch ( SQLException e ) 
+                return 0;
+            }
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	public int update( MovieSessions sessions ) 
+    public ResultSet list(String where) 
     {
-		return 0;
-	}
-
-	public int delete( MovieSessions sessions ) 
-    {
-		try 
+        String cmd = "SELECT id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme " +
+        			 "FROM bdcinema.tbsessoes";
+        if (!where.isEmpty()) 
         {
-			int linesAfected = 0;
+            cmd += " WHERE " + where;
+        }
 
-			if ( sessions.getIdSession() > 0 ) 
-            {
-                String cmd = " DELETE FROM DBCinema.TBSessoes ";
-					   cmd += " WHERE id_sessao = " + sessions.getIdSession();
-
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-
-			}
-            else
-            {
-				return 0;
-			}
-		} 
-        catch ( SQLException e ) 
+        try 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
-
-	public ResultSet list( String where ) 
-    {
-        String cmd = "SELECT id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme FROM DBCinema.TBSessoes";
-        
-        if ( !where.isEmpty() ) 
+            return dbLink.executeQuery(cmd);
+        } 
+        catch (SQLException e) 
         {
-			cmd += " WHERE " + where;
-		}
-
-		ResultSet rs = null;
-
-		try 
-        {
-			rs = dbLink.executeQuery( cmd );
-		} 
-        catch ( SQLException e ) 
-        {
-			e.printStackTrace();
-		}
-        
-		return rs;
-	} 
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

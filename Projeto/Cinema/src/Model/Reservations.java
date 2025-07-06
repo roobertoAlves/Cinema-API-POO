@@ -12,7 +12,7 @@ public class Reservations
     private int seatNumber;
     private String reservationDate;
 
-    private String tableName = "TBReservas";
+    private String tableName = "tbreservas";
     private String fieldsName = "id_reserva, cliente_id, sessao_id, poltrona, dataReserva";
     private String fieldKey = "id_reserva";
 

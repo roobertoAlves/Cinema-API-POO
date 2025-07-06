@@ -11,7 +11,7 @@ public class BomboniereProducts
     private double price;
     private String availability;
 
-    private String tableName = "TBProdutosB";
+    private String tableName = "tbprodutosb";
     private String fieldsName = "id_produto, nome, preco, estoqueDisponivel";
     private String fieldKey = "id_produto";
 

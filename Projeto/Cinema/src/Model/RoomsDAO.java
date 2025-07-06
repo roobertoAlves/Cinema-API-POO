@@ -27,48 +27,58 @@ public class RoomsDAO
     {
 		try 
         {
-			int linesAfected = 0;
+			String cmd = "INSERT INTO bdcinema.tbsalas (numeroSala, capacidadeMaxima," + 
+					 "capacidadeAtual, statusSala, tipoSala, poltronas) VALUES (" 
+			+ rooms.getRoomNumber() + ", " 
+			+ rooms.getRoomMaxCapacity() + ", " 
+			+ rooms.getRoomCurrentCapacity() + ", '" 
+			+ rooms.getRoomStatus() + "', '" 
+			+ rooms.getRoomType() + "', " 
+			+ rooms.getSeats() + ")";
+			   
+			int linesAfected = dbLink.executeUpdate( cmd );
 
-			if ( rooms.getRoomId() > 0 ) 
-            {
-				String cmd =  "INSERT INTO DBCinema.TBSalas ( "
-                        + "id_sala, "
-                        + "numeroSala, "
-                        + "capacidadeMaxima, "
-                        + "capacidadeAtual, "
-                        + "statusSala, "
-                        + "tipoSala, "
-                        + "poltronas) "
-                        + " values ('";
-                        
-                    cmd +=  rooms.getRoomId() +"', '" +
-						rooms.getRoomNumber() +"', '" +
-						rooms.getRoomMaxCapacity() +"', '" +
-						rooms.getRoomCurrentCapacity() +"', '" +
-						rooms.getRoomStatus() +"', '" +
-						rooms.getRoomType() +"', '" +
-						rooms.getSeats() +
-                    ")'" ;
-							
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-			}
-            else
-            {
-				return 0;
-			}
-		} 
-        catch ( SQLException e ) 
+			return linesAfected;
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-			return 0;
-		}		
+            e.printStackTrace();
+            return 0;
+        }
+		
 	}
 
 	public int update( Rooms rooms ) 
     {
-		return 0;
+		try 
+		{
+			int linesAfected = 0;
+
+			if ( rooms.getRoomId() > 0 ) 
+			{
+				String cmd = "UPDATE bdcinema.tbsalas SET" + 
+							 "numeroSala = " + rooms.getRoomNumber() + 
+							 ", capacidadeMaxima = " + rooms.getRoomMaxCapacity() + 
+							 ", capacidadeAtual = " + rooms.getRoomCurrentCapacity() + 
+							 ", statusSala = '" + rooms.getRoomStatus() + 
+							 "', tipoSala = '" + rooms.getRoomType() + 
+							 "', poltronas = " + rooms.getSeats() +
+							 " WHERE id_sala = " + rooms.getRoomId();
+
+				linesAfected = dbLink.executeUpdate( cmd );
+
+				return linesAfected;
+			}
+			else
+			{
+				return 0;
+			}
+		} 
+		catch ( SQLException e ) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 	public int delete( Rooms rooms ) 
@@ -79,7 +89,7 @@ public class RoomsDAO
 
 			if (rooms.getRoomId() > 0) 
             {
-				String cmd =  " DELETE FROM DBCinema.TBSalas";
+				String cmd =  " DELETE FROM bdcinema.tbsalas";
 					   cmd += " WHERE id_sala = " + rooms.getRoomId();
 
 				
@@ -102,7 +112,8 @@ public class RoomsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_sala, numeroSala, capacidadeMaxima, capacidadeAtual, statusSala, tipoSala, poltronas FROM DBCinema.TBSalas";
+        String cmd = "SELECT id_sala, numeroSala, capacidadeMaxima, capacidadeAtual," + 
+        			 "statusSala, tipoSala, poltronas FROM bdcinema.tbsalas";
         
         if ( !where.isEmpty() ) 
         {

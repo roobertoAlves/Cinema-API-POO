@@ -11,7 +11,7 @@ public class Purchase
     private String purchaseDate;
     private double totalValue;
 
-    private String tableName = "TBCompras";
+    private String tableName = "tbcompras";
     private String fieldsName = "id_compra, cliente_id, funcionario_id, dataCompra, valorTotal";
     private String fieldKey = "id_compra";
 

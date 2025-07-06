@@ -4,128 +4,114 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 import database.DBConnection;
 
 public class MoviesDAO 
 {
-
     private Statement dbLink = null;
 
-	public MoviesDAO() 
+    public MoviesDAO() 
     {
-		try 
+        try 
         {
-			this.dbLink = new DBConnection().getConnection().createStatement();
-		} 
-        catch ( SQLException e ) 
+            this.dbLink = new DBConnection().getConnection().createStatement();
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
+    }
 
-	}
-
-	public int insert( Movies movie ) 
+    public int insert(Movies movie) 
     {
-		try 
+        try 
         {
-			int linesAfected = 0;
+            String cmd = "INSERT INTO bdcinema.tbfilmes (titulo, classificacao, duracao, tipoFilme, " +
+            			 "idiomaFilme, dublagem,legenda, distribuidor) VALUES ('"
+                    + movie.getMovieTitle() + "', '"
+                    + movie.getMovieRating() + "', '"
+                    + movie.getMovieDuration() + "', '"
+                    + movie.getMovieType() + "', '"
+                    + movie.getMovieLanguage() + "', '"
+                    + movie.getMovieDubbing() + "', '"
+                    + movie.getMovieSubtitle() + "', '"
+                    + movie.getMovieDistributor() + "')";
 
-			if ( movie.getMovieId() > 0 ) 
+            int linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }       
+    }
+
+    public int update(Movies movie) 
+    {
+        try 
+        {
+            String cmd = "UPDATE bdcinema.tbfilmes SET "
+                    + "titulo = '" + movie.getMovieTitle() + "', "
+                    + "classificacao = '" + movie.getMovieRating() + "', "
+                    + "duracao = '" + movie.getMovieDuration() + "', "
+                    + "tipoFilme = '" + movie.getMovieType() + "', "
+                    + "idiomaFilme = '" + movie.getMovieLanguage() + "', "
+                    + "dublagem = '" + movie.getMovieDubbing() + "', "
+                    + "legenda = '" + movie.getMovieSubtitle() + "', "
+                    + "distribuidor = '" + movie.getMovieDistributor() + "' "
+                    + "WHERE id_filme = " + movie.getMovieId();
+
+            int linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int delete(Movies movie) 
+    {
+        try 
+        {
+            if (movie.getMovieId() > 0) 
             {
-                String cmd =  "INSERT INTO DBCinema.TBFilmes ( "
-                        + "id_filme, "
-                        + "titulo, "
-                        + "classificacao, "
-                        + "duracao, "
-                        + "tipoFilme, "
-                        + "idiomaFilme, "
-                        + "dublagem, "
-                        + "legenda, "
-                        + "distribuidor) "
-                        + " values ('";
-
-					cmd +=  movie.getMovieId() +"', '" +
-						movie.getMovieTitle() +"', '" +
-						movie.getMovieRating() +"', '" +
-						movie.getMovieDuration() +"', '" +
-						movie.getMovieType() +"', '" +
-						movie.getMovieLanguage() +"', '" +
-						movie.getMovieDubbing() +"', '" +
-						movie.getMovieSubtitle() +"', '" +
-						movie.getMovieDistributor() +
-						
-                    ")'" ;
-							
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-			}
-            else
+                String cmd = "DELETE FROM bdcinema.tbfilmes WHERE id_filme = " + movie.getMovieId();
+                int linesAffected = dbLink.executeUpdate(cmd);
+                return linesAffected;
+            } 
+            else 
             {
-				return 0;
-			}
-		} 
-        catch ( SQLException e ) 
+                return 0;
+            }
+        } 
+        catch (SQLException e) 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	public int update( Movies movie ) 
+    public ResultSet list(String where) 
     {
-		return 0;
-	}
-
-	public int delete( Movies movie ) 
-    {
-		try 
+        String cmd = "SELECT id_filme, titulo, classificacao, duracao, tipoFilme, idiomaFilme, dublagem," + 
+        			 "legenda, distribuidor FROM bdcinema.tbfilmes";
+        if (!where.isEmpty()) 
         {
-			int linesAfected = 0;
+            cmd += " WHERE " + where;
+        }
 
-			if ( movie.getMovieId() > 0 ) 
-            {
-				String cmd =  " DELETE FROM DBCinema.TBFilmes ";
-					   cmd += " WHERE id_filme = " + movie.getMovieId();
-				
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-
-			}
-            else
-            {
-				return 0;
-			}
-		} 
-        catch ( SQLException e ) 
+        try 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
-
-	public ResultSet list( String where ) 
-    {
-		String cmd = "SELECT id_filme, titulo, classificacao, duracao, tipoFilme, idiomaFilme, dublagem, legenda, distribuidor FROM DBCinema.TBFilmes";
-        
-        if ( !where.isEmpty() ) 
+            return dbLink.executeQuery(cmd);
+        } 
+        catch (SQLException e) 
         {
-			cmd += " WHERE " + where;
-		}
-
-		ResultSet rs = null;
-
-		try 
-        {
-			rs = dbLink.executeQuery( cmd );
-		} 
-        catch ( SQLException e ) 
-        {
-			e.printStackTrace();
-		}
-        
-		return rs;
-	}
-
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
