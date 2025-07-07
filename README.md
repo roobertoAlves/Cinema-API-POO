@@ -330,8 +330,7 @@ This project is licensed under the MIT License.
 
 ## Contact & Links
 
-* Repository: [GitHub](#https://github.com/roobertoAlves)
-* E-mail: [E-mail](jbetodamasceno@gmail.com)
+* E-mail: jbetodamasceno@gmail.com
 * Institution: IFSP Guarulhos
 
 ---
