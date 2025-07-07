@@ -10,146 +10,146 @@ public class RoomsDAO
 
     private Statement dbLink = null;
 
-	public RoomsDAO() 
+    public RoomsDAO() 
     {
-		try 
+        try 
         {
-			this.dbLink = new DBConnection().getConnection().createStatement();
-		} 
+            this.dbLink = new DBConnection().getConnection().createStatement();
+        } 
         catch ( SQLException e ) 
         {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	public int insert( Rooms rooms ) 
+    public int insert( Rooms rooms ) 
     {
-		try 
+        try 
         {
-			String cmd = "INSERT INTO bdcinema.tbsalas (numeroSala, capacidadeMaxima," + 
-					 "capacidadeAtual, statusSala, tipoSala, poltronas) VALUES (" 
-			+ rooms.getRoomNumber() + ", " 
-			+ rooms.getRoomMaxCapacity() + ", " 
-			+ rooms.getRoomCurrentCapacity() + ", '" 
-			+ rooms.getRoomStatus() + "', '" 
-			+ rooms.getRoomType() + "', " 
-			+ rooms.getSeats() + ")";
-			   
-			int linesAfected = dbLink.executeUpdate( cmd );
+            String cmd = "INSERT INTO bdcinema.tbsalas (numeroSala, capacidadeMaxima," + 
+                     "capacidadeAtual, statusSala, tipoSala, poltronas) VALUES (" 
+            + rooms.getRoomNumber() + ", " 
+            + rooms.getRoomMaxCapacity() + ", " 
+            + rooms.getRoomCurrentCapacity() + ", '" 
+            + rooms.getRoomStatus() + "', '" 
+            + rooms.getRoomType() + "', " 
+            + rooms.getSeats() + ")";
+               
+            int linesAfected = dbLink.executeUpdate( cmd );
 
-			return linesAfected;
+            return linesAfected;
         } 
         catch (SQLException e) 
         {
             e.printStackTrace();
             return 0;
         }
-		
-	}
+        
+    }
 
-	public int update( Rooms rooms ) 
+    public int update( Rooms rooms ) 
     {
-		try 
-		{
-			int linesAfected = 0;
-
-			if ( rooms.getRoomId() > 0 ) 
-			{
-				String cmd = "UPDATE bdcinema.tbsalas SET" + 
-							 "numeroSala = " + rooms.getRoomNumber() + 
-							 ", capacidadeMaxima = " + rooms.getRoomMaxCapacity() + 
-							 ", capacidadeAtual = " + rooms.getRoomCurrentCapacity() + 
-							 ", statusSala = '" + rooms.getRoomStatus() + 
-							 "', tipoSala = '" + rooms.getRoomType() + 
-							 "', poltronas = " + rooms.getSeats() +
-							 " WHERE id_sala = " + rooms.getRoomId();
-
-				linesAfected = dbLink.executeUpdate( cmd );
-
-				return linesAfected;
-			}
-			else
-			{
-				return 0;
-			}
-		} 
-		catch ( SQLException e ) 
-		{
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-	public int delete( Rooms rooms ) 
-    {
-		try 
+        try 
         {
-			int linesAfected = 0;
+            int linesAfected = 0;
 
-			if (rooms.getRoomId() > 0) 
+            if ( rooms.getRoomId() > 0 ) 
             {
-				String cmd =  " DELETE FROM bdcinema.tbsalas";
-					   cmd += " WHERE id_sala = " + rooms.getRoomId();
+                String cmd = "UPDATE bdcinema.tbsalas SET" + 
+                             "numeroSala = " + rooms.getRoomNumber() + 
+                             ", capacidadeMaxima = " + rooms.getRoomMaxCapacity() + 
+                             ", capacidadeAtual = " + rooms.getRoomCurrentCapacity() + 
+                             ", statusSala = '" + rooms.getRoomStatus() + 
+                             "', tipoSala = '" + rooms.getRoomType() + 
+                             "', poltronas = " + rooms.getSeats() +
+                             " WHERE id_sala = " + rooms.getRoomId();
 
-				
-				linesAfected = dbLink.executeUpdate( cmd );
+                linesAfected = dbLink.executeUpdate( cmd );
 
-				return linesAfected;
-
-			}
+                return linesAfected;
+            }
             else
             {
-				return 0;
-			}
-		} 
+                return 0;
+            }
+        } 
         catch ( SQLException e ) 
         {
-			e.printStackTrace();
-			return 0;
-		}		
-	}
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	public ResultSet list( String where ) 
+    public int delete( Rooms rooms ) 
+    {
+        try 
+        {
+            int linesAfected = 0;
+
+            if (rooms.getRoomId() > 0) 
+            {
+                String cmd =  " DELETE FROM bdcinema.tbsalas";
+                       cmd += " WHERE id_sala = " + rooms.getRoomId();
+
+                
+                linesAfected = dbLink.executeUpdate( cmd );
+
+                return linesAfected;
+
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch ( SQLException e ) 
+        {
+            e.printStackTrace();
+            return 0;
+        }		
+    }
+
+    public ResultSet list( String where ) 
     {
         String cmd = "SELECT id_sala, numeroSala, capacidadeMaxima, capacidadeAtual," + 
-        			 "statusSala, tipoSala, poltronas FROM bdcinema.tbsalas";
+                     "statusSala, tipoSala, poltronas FROM bdcinema.tbsalas";
         
         if ( !where.isEmpty() ) 
         {
-			cmd += " WHERE " + where;
-		}
+            cmd += " WHERE " + where;
+        }
 
-		ResultSet rs = null;
+        ResultSet rs = null;
 
-		try 
+        try 
         {
-			rs = dbLink.executeQuery( cmd );
-		} 
+            rs = dbLink.executeQuery( cmd );
+        } 
         catch ( SQLException e ) 
         {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
         
-		return rs;
-	}
+        return rs;
+    }
 
-	public int updateCurrentCapacity(int roomId, int newCurrentCapacity) 
+    public int updateCurrentCapacity(int roomId, int newCurrentCapacity) 
     {
-		try 
-		{
-			String cmd = "UPDATE bdcinema.tbsalas SET capacidadeAtual = " + newCurrentCapacity + 
-						 " WHERE id_sala = " + roomId;
+        try 
+        {
+            String cmd = "UPDATE bdcinema.tbsalas SET capacidadeAtual = " + newCurrentCapacity + 
+                         " WHERE id_sala = " + roomId;
 
-			int linesAfected = dbLink.executeUpdate(cmd);
-			return linesAfected;
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			return 0;
-		}
-	}
+            int linesAfected = dbLink.executeUpdate(cmd);
+            return linesAfected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
     
     public int resetAllRoomsCapacity() 
     {

@@ -45,8 +45,8 @@ public class Rooms
     }
 
     public int save() 
-	{
-		if ( this.getRoomId() > 0 ) 
+    {
+        if ( this.getRoomId() > 0 ) 
         {
             return ( dbQuery.update(this.toArray()) );
         } 
@@ -54,31 +54,31 @@ public class Rooms
         {
             return ( dbQuery.insert(this.toArray()) );
         }
-	}
+    }
 
-	public int delete() 
-	{
-		if ( this.getRoomId() > 0 ) 
+    public int delete() 
+    {
+        if ( this.getRoomId() > 0 ) 
         {
             return ( dbQuery.delete(this.toArray()) );
         }
 
-		return (0);
-	}
-	
-	public ResultSet listByEmail( String email ) 
-	{
-		return ( dbQuery.select("email = '" + email + "'") );
-	}
-	
-	public ResultSet listAll() 
-	{
-		return ( dbQuery.select("") );
-	}
+        return (0);
+    }
+    
+    public ResultSet listByEmail( String email ) 
+    {
+        return ( dbQuery.select("email = '" + email + "'") );
+    }
+    
+    public ResultSet listAll() 
+    {
+        return ( dbQuery.select("") );
+    }
 
-	public String toString() 
-	{
-		return(
+    public String toString() 
+    {
+        return(
             "Room ID: " + this.getRoomId() + 
             ", Room Number: " + this.getRoomNumber() + 
             ", Max Capacity: " + this.getRoomMaxCapacity() + 
@@ -86,13 +86,13 @@ public class Rooms
             ", Status: " + this.getRoomStatus() + 
             ", Type: " + this.getRoomType() + 
             ", Seats: " + this.getSeats()
-		);
-	}
+        );
+    }
 
-	public String[] toArray() 
-	{
-		String[] arrayStr = 
-		{
+    public String[] toArray() 
+    {
+        String[] arrayStr = 
+        {
             String.valueOf( this.getRoomId() ),
             String.valueOf( this.getRoomNumber() ),
             String.valueOf( this.getRoomMaxCapacity() ),
@@ -100,10 +100,10 @@ public class Rooms
             this.getRoomStatus(),
             this.getRoomType(),
             String.valueOf( this.getSeats() )
-		};
+        };
 
-		return arrayStr;	
-	}
+        return arrayStr;	
+    }
 
     public int getRoomId() 
     {

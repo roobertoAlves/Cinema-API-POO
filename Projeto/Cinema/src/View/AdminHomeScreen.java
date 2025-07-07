@@ -23,27 +23,26 @@ public class AdminHomeScreen extends JFrame
         titleLabel.setBounds(200, 30, 500, 40);
         mainPanel.add(titleLabel);
 
-
         JPanel buttonPanel = new JPanel(new GridLayout(0, 2, 20, 20));
-        buttonPanel.setBounds(180, 100, 440, 300);
+        buttonPanel.setBounds(180, 100, 440, 340);
         buttonPanel.setBackground(new Color(18, 18, 30));
 
         JButton btnMovies = createButton("Gerenciar Filmes");
         JButton btnConcession = createButton("Gerenciar Bomboniere");
         JButton btnSessions = createButton("Sessões e Poltronas");
         JButton btnGenres = createButton("Gerenciar Gêneros");
+        JButton btnRooms = createButton("Gerenciar Salas");
         JButton btnResetCapacity = createButton("Resetar Capacidades");
-        JButton btnPlaceholder = createButton("");
 
         buttonPanel.add(btnMovies);
         buttonPanel.add(btnConcession);
         buttonPanel.add(btnSessions);
         buttonPanel.add(btnGenres);
+        buttonPanel.add(btnRooms);
         buttonPanel.add(btnResetCapacity);
-        buttonPanel.add(btnPlaceholder);
 
         JButton btnLogout = createButton("Sair");
-        btnLogout.setBounds(280, 440, 240, 40);
+        btnLogout.setBounds(280, 480, 240, 40);
 
         btnMovies.addActionListener((ActionEvent e) -> {
             new MovieManagerScreen(this);
@@ -61,15 +60,18 @@ public class AdminHomeScreen extends JFrame
         });
         
         btnSessions.addActionListener(e -> { 
-			new MovieSessionManagerScreen(this);
-			setVisible(false);
-		});
+            new MovieSessionManagerScreen(this);
+            setVisible(false);
+        });
+        
+        btnRooms.addActionListener(e -> {
+            new RoomManagerScreen(this);
+            setVisible(false);
+        });
         
         btnResetCapacity.addActionListener(e -> {
             resetRoomCapacities();
         });
-        
-        btnPlaceholder.setVisible(false);
         
         btnLogout.addActionListener(e -> {
             new LoginScreen();

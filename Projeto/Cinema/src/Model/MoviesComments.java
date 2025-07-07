@@ -19,8 +19,8 @@ public class MoviesComments
 
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );
     public int save() 
-	{
-		if ( this.getIdComementary() > 0)  
+    {
+        if ( this.getIdComementary() > 0)  
         {
             return ( dbQuery.update(this.toArray()) );
         } 
@@ -28,28 +28,28 @@ public class MoviesComments
         {
             return ( dbQuery.insert(this.toArray()) );
         }
-	}
+    }
 
-	public int delete() 
-	{
-		if ( this.getIdComementary() > 0 ) 
+    public int delete() 
+    {
+        if ( this.getIdComementary() > 0 ) 
         {
             return ( dbQuery.delete(this.toArray()) );
         }
 
-		return (0);
-	}
-	
-	public ResultSet listAll() 
-	{
-		return ( dbQuery.select("") );
-	}
+        return (0);
+    }
+    
+    public ResultSet listAll() 
+    {
+        return ( dbQuery.select("") );
+    }
 
 
 
     public String toString() 
-	{
-		return(
+    {
+        return(
             "MoviesComentaries [idComementary=" + idComementary + 
             ", clientId=" + clientId + 
             ", movieId=" + movieId + 
@@ -57,22 +57,22 @@ public class MoviesComments
             ", rating=" + rating + 
             ", commentDate=" + commentDate + "]"
         );
-	}
+    }
 
-	public String[] toArray() 
-	{
-		String[] arrayStr = 
-		{
+    public String[] toArray() 
+    {
+        String[] arrayStr = 
+        {
             String.valueOf( this.getIdComementary() ),
             String.valueOf( this.getClientId() ),
             String.valueOf( this.getMovieId() ),
             this.getComment(),
             String.valueOf( this.getRating() ),
             this.getCommentDate()
-		};
+        };
 
-		return arrayStr;	
-	}
+        return arrayStr;	
+    }
 
 
 

@@ -10,9 +10,11 @@ public class MovieSessions
     private int roomId;
     private String startTime;
     private String movieDuration;
+    private String sessionType;
+    private double ticketPrice;
 
     private String tableName = "tbsessoes";
-    private String fieldsName = "id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme";
+    private String fieldsName = "id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme, tipoSessao, precoIngresso";
     private String fieldKey = "id_sessao";
 
     private DBQuery dbQuery = new DBQuery( tableName, fieldsName, fieldKey );
@@ -21,26 +23,31 @@ public class MovieSessions
     {
 
     }
-    public MovieSessions( int idSession, int movieId, int roomId, String startTime, String movieDuration ) 
+    
+    public MovieSessions( int idSession, int movieId, int roomId, String startTime, String movieDuration, String sessionType, double ticketPrice ) 
     {
         this.idSession = idSession;
         this.movieId = movieId;
         this.roomId = roomId;
         this.startTime = startTime;
         this.movieDuration = movieDuration;
+        this.sessionType = sessionType;
+        this.ticketPrice = ticketPrice;
     }
-    public MovieSessions( int movieId, int roomId, String startTime, String movieDuration ) 
+    
+    public MovieSessions( int movieId, int roomId, String startTime, String movieDuration, String sessionType, double ticketPrice ) 
     {
         this.movieId = movieId;
         this.roomId = roomId;
         this.startTime = startTime;
         this.movieDuration = movieDuration;
+        this.sessionType = sessionType;
+        this.ticketPrice = ticketPrice;
     }
 
-
     public int save() 
-	{
-		if ( this.getIdSession() > 0 ) 
+    {
+        if ( this.getIdSession() > 0 ) 
         {
             return ( dbQuery.update(this.toArray()) );
         } 
@@ -48,51 +55,51 @@ public class MovieSessions
         {
             return ( dbQuery.insert(this.toArray()) );
         }
-	}
+    }
 
-	public int delete() 
-	{
-		if ( this.getIdSession() > 0 ) 
+    public int delete() 
+    {
+        if ( this.getIdSession() > 0 ) 
         {
             return ( dbQuery.delete(this.toArray()) );
         }
 
-		return (0);
-	}
-	
-
-	public ResultSet listAll() 
-	{
-		return ( dbQuery.select("") );
-	}
-
+        return (0);
+    }
+    
+    public ResultSet listAll() 
+    {
+        return ( dbQuery.select("") );
+    }
 
     public String toString() 
-	{
-		return(
+    {
+        return(
             "ID: " + this.getIdSession() + 
             ", Movie ID: " + this.getMovieId() + 
             ", Room ID: " + this.getRoomId() + 
             ", Start Time: " + this.getStartTime() + 
-            ", Duration: " + this.getMovieDuration()
+            ", Duration: " + this.getMovieDuration() +
+            ", Type: " + this.getSessionType() +
+            ", Price: " + this.getTicketPrice()
         );
-	}
+    }
 
-	public String[] toArray() 
-	{
-		String[] arrayStr = 
-		{
+    public String[] toArray() 
+    {
+        String[] arrayStr = 
+        {
             String.valueOf( this.getIdSession() ),
             String.valueOf( this.getMovieId() ),
             String.valueOf( this.getRoomId() ),
             this.getStartTime(),
-            this.getMovieDuration()
-		};
+            this.getMovieDuration(),
+            this.getSessionType(),
+            String.valueOf( this.getTicketPrice() )
+        };
 
-		return arrayStr;	
-	}
-
-
+        return arrayStr;	
+    }
 
     public int getIdSession() 
     {
@@ -134,5 +141,20 @@ public class MovieSessions
     {
         this.movieDuration = movieDuration;
     }
-
+    public String getSessionType() 
+    {
+        return sessionType;
+    }
+    public void setSessionType( String sessionType ) 
+    {
+        this.sessionType = sessionType;
+    }
+    public double getTicketPrice() 
+    {
+        return ticketPrice;
+    }
+    public void setTicketPrice( double ticketPrice ) 
+    {
+        this.ticketPrice = ticketPrice;
+    }
 }

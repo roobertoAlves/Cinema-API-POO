@@ -3,8 +3,6 @@ package Model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-
 import database.DBConnection;
 
 public class MovieSessionsDAO 
@@ -28,11 +26,13 @@ public class MovieSessionsDAO
         try 
         {
             String cmd = "INSERT INTO bdcinema.tbsessoes (filme_id, sala_id, horarioInicio, "
-            		+ "duracaoFilme) VALUES ('" 
-            		+ session.getMovieId() + "', '"
-					+ session.getRoomId() + "', '"
-					+ session.getStartTime() + "', '"
-					+ session.getMovieDuration() + "')";
+                    + "duracaoFilme, tipoSessao, precoIngresso) VALUES (" 
+                    + session.getMovieId() + ", "
+                    + session.getRoomId() + ", '"
+                    + session.getStartTime() + "', '"
+                    + session.getMovieDuration() + "', '"
+                    + session.getSessionType() + "', "
+                    + session.getTicketPrice() + ")";
 
             int linesAffected = dbLink.executeUpdate(cmd);
             return linesAffected;
@@ -49,10 +49,12 @@ public class MovieSessionsDAO
         try 
         {
             String cmd = "UPDATE bdcinema.tbsessoes SET "
-                    + "filme_id = '" + session.getMovieId() + "', "
-                    + "sala_id = '" + session.getRoomId() + "', "
+                    + "filme_id = " + session.getMovieId() + ", "
+                    + "sala_id = " + session.getRoomId() + ", "
                     + "horarioInicio = '" + session.getStartTime() + "', "
-                    + "duracaoFilme = '" + session.getMovieDuration() + "' "
+                    + "duracaoFilme = '" + session.getMovieDuration() + "', "
+                    + "tipoSessao = '" + session.getSessionType() + "', "
+                    + "precoIngresso = " + session.getTicketPrice() + " "
                     + "WHERE id_sessao = " + session.getIdSession();
 
             int linesAffected = dbLink.executeUpdate(cmd);
@@ -89,8 +91,8 @@ public class MovieSessionsDAO
 
     public ResultSet list(String where) 
     {
-        String cmd = "SELECT id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme " +
-        			 "FROM bdcinema.tbsessoes";
+        String cmd = "SELECT id_sessao, filme_id, sala_id, horarioInicio, duracaoFilme, tipoSessao, precoIngresso " +
+                     "FROM bdcinema.tbsessoes";
         if (!where.isEmpty()) 
         {
             cmd += " WHERE " + where;
