@@ -90,15 +90,15 @@ public class DBConnection
 				System.err.println("\nPossíveis soluções:");
 				System.err.println("1. Verifique se o MySQL/XAMPP está rodando");
 				System.err.println("2. Verifique se a porta 3306 está disponível");
-				System.err.println("3. Verifique se o banco 'DBCinema' existe");
+				System.err.println("3. Verifique se o banco 'BDCinema' existe");
 			} else if (e.getErrorCode() == 1045) {
 				System.err.println("\nErro de autenticação:");
 				System.err.println("1. Verifique o usuário e senha");
 				System.err.println("2. Para XAMPP, geralmente user='root' e password=''");
 			} else if (e.getErrorCode() == 1049) {
 				System.err.println("\nBanco de dados não encontrado:");
-				System.err.println("1. Execute o script create_dbcinema.sql");
-				System.err.println("2. Certifique-se que o banco 'DBCinema' foi criado");
+				System.err.println("1. Execute o script create_bdcinema.sql");
+				System.err.println("2. Certifique-se que o banco 'BDCinema' foi criado");
 			}
 			
 			e.printStackTrace();

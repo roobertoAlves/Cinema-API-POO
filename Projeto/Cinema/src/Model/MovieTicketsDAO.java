@@ -31,7 +31,7 @@ public class MovieTicketsDAO
 
 			if ( tickets.getIdTicket() > 0 ) 
             {
-                String cmd = "INSERT INTO dbcinema.tbingressos(sessao_id, cliente_id, poltrona," + 
+                String cmd = "INSERT INTO bdcinema.tbingressos(sessao_id, cliente_id, poltrona," + 
                 			 "valor, tipoIngresso) VALUES(" 
                 		+ tickets.getSessionId() + ", " 
             			+ tickets.getClientId() + ", " 
@@ -63,7 +63,7 @@ public class MovieTicketsDAO
 
 			if ( tickets.getIdTicket() > 0 ) 
 			{
-				String cmd = "UPDATE dbcinema.tbingressos SET "
+				String cmd = "UPDATE bdcinema.tbingressos SET "
 						+ "sessao_id = " + tickets.getSessionId() + ", "
 						+ "cliente_id = " + tickets.getClientId() + ", "
 						+ "poltrona = " + tickets.getSeatNumber() + ", "
@@ -95,7 +95,7 @@ public class MovieTicketsDAO
 
 			if ( tickets.getIdTicket() > 0 ) 
             {
-                String cmd = "DELETE FROM dbcinema.tbingressos WHERE id_ingresso = " + tickets.getIdTicket();
+                String cmd = "DELETE FROM bdcinema.tbingressos WHERE id_ingresso = " + tickets.getIdTicket();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -117,7 +117,7 @@ public class MovieTicketsDAO
 	public ResultSet list( String where ) 
     {
         String cmd = "SELECT id_ingresso, sessao_id, cliente_id, poltrona, valor, " +
-        		  	 "tipoIngresso FROM dbcinema.tbingressos";
+        		  	 "tipoIngresso FROM bdcinema.tbingressos";
  
         if ( !where.isEmpty() ) 
         {

@@ -105,15 +105,21 @@ public class LoginScreen extends JFrame {
 
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
-            } else if (username.equals("admin") && password.equals("admin")) {
+            } 
+            else if (username.equals("admin") && password.equals("admin")) 
+            {
                 JOptionPane.showMessageDialog(null, "Login de administrador bem-sucedido!");
+                dispose();
                 new AdminHomeScreen();
-                dispose();
-            } else if (username.equals("cli") && password.equals("cli")) {
+            } 
+            else if (username.equals("cli") && password.equals("cli")) 
+            {
                 JOptionPane.showMessageDialog(null, "Login de cliente bem-sucedido!");
-                new ClientHomeScreen();
                 dispose();
-            } else {
+                new ClientHomeScreen();
+            } 
+            else 
+            {
                 JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
             }
         });

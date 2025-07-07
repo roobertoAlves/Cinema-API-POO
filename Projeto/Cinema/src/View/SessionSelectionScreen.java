@@ -11,11 +11,14 @@ import java.sql.SQLException;
 
 public class SessionSelectionScreen extends JFrame {
     private int movieId;
+    private JFrame previousScreen;
     private MovieSessionsDAO sessionDAO = new MovieSessionsDAO();
     private RoomsDAO roomDAO = new RoomsDAO();
 
-    public SessionSelectionScreen(int movieId) {
+
+    public SessionSelectionScreen(int movieId, JFrame previousScreen) {
         this.movieId = movieId;
+        this.previousScreen = previousScreen;
 
         setTitle("Escolha uma Sessão");
         setSize(600, 400);
@@ -34,6 +37,26 @@ public class SessionSelectionScreen extends JFrame {
         JScrollPane scroll = new JScrollPane(sessionPanel);
         scroll.setBorder(null);
         add(scroll, BorderLayout.CENTER);
+
+        // Painel para botões de ação
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(new Color(18, 18, 30));
+
+        // Botão Voltar
+        JButton backButton = new JButton("← Voltar");
+        backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        backButton.setBackground(new Color(70, 70, 90));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFocusPainted(false);
+        backButton.addActionListener(e -> {
+            if (previousScreen != null) {
+                previousScreen.setVisible(true);
+            }
+            dispose();
+        });
+        buttonPanel.add(backButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
         try {
             ResultSet rs = sessionDAO.list("filme_id = " + movieId);
@@ -55,8 +78,8 @@ public class SessionSelectionScreen extends JFrame {
                 btn.setFont(new Font("SansSerif", Font.BOLD, 16));
 
                 btn.addActionListener(e -> {
-                    new SeatAndTicketSelectionScreen(sessionId); // Envia a sessão escolhida
-                    dispose();
+                    new SeatAndTicketSelectionScreen(sessionId, this); // Envia a sessão escolhida
+                    setVisible(false);
                 });
 
                 sessionPanel.add(Box.createVerticalStrut(10));

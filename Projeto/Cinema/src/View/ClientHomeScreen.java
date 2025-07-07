@@ -9,24 +9,79 @@ import java.sql.SQLException;
 
 public class ClientHomeScreen extends JFrame {
     private MoviesDAO movieDAO = new MoviesDAO();
+    private JFrame previousScreen;
 
     public ClientHomeScreen() {
+        this(null);
+    }
+
+    public ClientHomeScreen(JFrame previousScreen) {
+        this.previousScreen = previousScreen;
         setTitle("Escolha seu Filme");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(18, 18, 30));
 
+        // Painel superior com botão voltar e título
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(18, 18, 30));
+        
+        // Botão Voltar (apenas se houver tela anterior)
+        if (previousScreen != null) {
+            JButton backButton = new JButton("← Voltar");
+            backButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+            backButton.setBackground(new Color(70, 70, 90));
+            backButton.setForeground(Color.WHITE);
+            backButton.setFocusPainted(false);
+            backButton.addActionListener(e -> {
+                previousScreen.setVisible(true);
+                dispose();
+            });
+            topPanel.add(backButton, BorderLayout.WEST);
+        }
+
         JLabel titleLabel = new JLabel("🎬 Selecione um Filme", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 28));
         titleLabel.setForeground(new Color(160, 64, 255));
-        add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+        
+        // Botão Logout no canto superior direito
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+        logoutButton.setBackground(new Color(220, 60, 60));
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setFocusPainted(false);
+        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                logoutButton.setBackground(new Color(255, 80, 80));
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                logoutButton.setBackground(new Color(220, 60, 60));
+            }
+        });
+        logoutButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Deseja realmente fazer logout?", 
+                "Confirmar Logout", 
+                JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                new LoginScreen();
+                dispose();
+            }
+        });
+        topPanel.add(logoutButton, BorderLayout.EAST);
+        
+        add(topPanel, BorderLayout.NORTH);
 
         JPanel moviePanel = new JPanel();
-        moviePanel.setLayout(new GridLayout(0, 2, 20, 20));
+        moviePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         moviePanel.setBackground(new Color(18, 18, 30));
         JScrollPane scroll = new JScrollPane(moviePanel);
         scroll.setBorder(null);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
         add(scroll, BorderLayout.CENTER);
 
         try {
@@ -35,25 +90,63 @@ public class ClientHomeScreen extends JFrame {
                 int movieId = rs.getInt("id_filme");
                 String movieTitle = rs.getString("titulo");
 
-                JButton movieBtn = new JButton(movieTitle);
-                movieBtn.setBackground(new Color(130, 30, 200));
-                movieBtn.setForeground(Color.WHITE);
-                movieBtn.setFocusPainted(false);
-                movieBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
-
-                movieBtn.addActionListener(e -> 
-                {
-                    new SessionSelectionScreen(movieId);
-                    dispose();
-                });
-
-                moviePanel.add(movieBtn);
+                // Criar card do filme
+                JPanel movieCard = createMovieCard(movieTitle, movieId);
+                moviePanel.add(movieCard);
             }
+            rs.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar filmes.");
             e.printStackTrace();
         }
 
         setVisible(true);
+    }
+
+    private JPanel createMovieCard(String movieTitle, int movieId) {
+        JPanel card = new JPanel();
+        card.setLayout(new BorderLayout());
+        card.setBackground(new Color(45, 45, 65));
+        card.setPreferredSize(new Dimension(150, 180));
+        card.setBorder(BorderFactory.createLineBorder(new Color(70, 70, 90), 2));
+        
+        // Ícone do filme (parte superior do card)
+        JLabel iconLabel = new JLabel("🎬", SwingConstants.CENTER);
+        iconLabel.setFont(new Font("SansSerif", Font.BOLD, 48));
+        iconLabel.setForeground(new Color(160, 64, 255));
+        iconLabel.setOpaque(false);
+        
+        // Título do filme (parte inferior do card)
+        JLabel titleLabel = new JLabel("<html><center>" + movieTitle + "</center></html>", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setOpaque(false);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 5));
+        
+        card.add(iconLabel, BorderLayout.CENTER);
+        card.add(titleLabel, BorderLayout.SOUTH);
+        
+        // Adicionar efeito hover
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBackground(new Color(60, 60, 85));
+                card.setBorder(BorderFactory.createLineBorder(new Color(160, 64, 255), 2));
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBackground(new Color(45, 45, 65));
+                card.setBorder(BorderFactory.createLineBorder(new Color(70, 70, 90), 2));
+            }
+            
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                new SessionSelectionScreen(movieId, ClientHomeScreen.this);
+                setVisible(false);
+            }
+        });
+        
+        return card;
     }
 }

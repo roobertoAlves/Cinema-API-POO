@@ -134,4 +134,21 @@ public class RoomsDAO
 		return rs;
 	}
 
+	public int updateCurrentCapacity(int roomId, int newCurrentCapacity) 
+    {
+		try 
+		{
+			String cmd = "UPDATE bdcinema.tbsalas SET capacidadeAtual = " + newCurrentCapacity + 
+						 " WHERE id_sala = " + roomId;
+
+			int linesAfected = dbLink.executeUpdate(cmd);
+			return linesAfected;
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
 }

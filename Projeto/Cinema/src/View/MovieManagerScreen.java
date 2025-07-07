@@ -20,8 +20,11 @@ public class MovieManagerScreen extends JFrame {
     private MoviesDAO movieDAO = new MoviesDAO();
     private MovieGenderDAO genreDAO = new MovieGenderDAO();
     private int selectedMovieId = 0;
+    private JFrame previousScreen;
 
-    public MovieManagerScreen() {
+
+    public MovieManagerScreen(JFrame previousScreen) {
+        this.previousScreen = previousScreen;
         setTitle("Gerenciar Filmes - CinePlay");
         setSize(1000, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -34,7 +37,9 @@ public class MovieManagerScreen extends JFrame {
         JButton backButton = createButton("Voltar", 870, 10);
         backButton.setSize(100, 30);
         backButton.addActionListener(e -> {
-            new AdminHomeScreen();
+            if (previousScreen != null) {
+                previousScreen.setVisible(true);
+            }
             dispose();
         });
         add(backButton);

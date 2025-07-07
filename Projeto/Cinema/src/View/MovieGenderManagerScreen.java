@@ -21,9 +21,11 @@ public class MovieGenderManagerScreen extends JFrame
     private MovieGenderDAO genderDAO = new MovieGenderDAO();
     private MovieGender selectedGenre = new MovieGender();
     private int selectedGenreId = 0;
+    private JFrame previousScreen;
 
-    public MovieGenderManagerScreen() 
+    public MovieGenderManagerScreen(JFrame previousScreen) 
     {
+        this.previousScreen = previousScreen;
         setTitle("Gerenciar Gêneros - CinePlay");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -70,7 +72,10 @@ public class MovieGenderManagerScreen extends JFrame
         JButton updateButton = createButton("Atualizar", 530, 120);
         JButton deleteButton = createButton("Excluir", 530, 160);
         JButton clearButton = createButton("Limpar", 530, 200);
-        JButton backButton = createButton("Voltar", 530, 240);
+        
+        // Botão "Voltar" no canto superior direito
+        JButton backButton = createButton("Voltar", 870, 10);
+        backButton.setSize(100, 30);
 
         add(addButton);
         add(updateButton);
@@ -98,7 +103,9 @@ public class MovieGenderManagerScreen extends JFrame
         clearButton.addActionListener(e -> clearFields());
         
         backButton.addActionListener(e -> {
-            new AdminHomeScreen();
+            if (previousScreen != null) {
+                previousScreen.setVisible(true);
+            }
             dispose();
         });
 

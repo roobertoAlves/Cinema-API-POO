@@ -37,26 +37,27 @@ public class AdminHomeScreen extends JFrame {
         buttonPanel.add(btnSessions);
         buttonPanel.add(btnGenres);
 
-        // Botão sair centralizado
         JButton btnLogout = createButton("Sair");
         btnLogout.setBounds(280, 400, 240, 40);
 
-        // Ações
         btnMovies.addActionListener((ActionEvent e) -> {
-            new MovieManagerScreen();
-            dispose();
+            new MovieManagerScreen(this);
+            setVisible(false);
         });
 
         btnGenres.addActionListener((ActionEvent e) -> {
-            new MovieGenderManagerScreen();
-            dispose();
+            new MovieGenderManagerScreen(this);
+            setVisible(false);
         });
 
-        btnConcession.addActionListener(e -> JOptionPane.showMessageDialog(this, "Abrir CRUD de Bomboniere"));
+        btnConcession.addActionListener(e -> {
+            new BomboniereManagerScreen(this);
+            setVisible(false);
+        });
         
         btnSessions.addActionListener(e -> { 
-			new MovieSessionManagerScreen();
-			dispose();
+			new MovieSessionManagerScreen(this);
+			setVisible(false);
 		});
         
         btnLogout.addActionListener(e -> {
