@@ -20,7 +20,6 @@ public class Reservations
 
     public Reservations() 
     {
-        // Default constructor
     }
     public Reservations( int idReservation, int clientId, int sessionId, int seatNumber, String reservationDate ) 
     {
@@ -63,7 +62,7 @@ public class Reservations
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -90,7 +89,7 @@ public class Reservations
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdReservation() 
     {

@@ -21,11 +21,8 @@ public class MovieGenderManagerScreen extends JFrame
     private MovieGenderDAO genderDAO = new MovieGenderDAO();
     private MovieGender selectedGenre = new MovieGender();
     private int selectedGenreId = 0;
-    private JFrame previousScreen;
-
     public MovieGenderManagerScreen(JFrame previousScreen) 
     {
-        this.previousScreen = previousScreen;
         setTitle("Gerenciar Gêneros - CinePlay");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,6 +30,24 @@ public class MovieGenderManagerScreen extends JFrame
         setLayout(null);
         getContentPane().setBackground(new Color(18, 18, 30));
         setIconImage(Toolkit.getDefaultToolkit().getImage("src/Assets/cineplay.png"));
+
+
+        JButton backButton = createButton("Voltar", 670, 10);
+        backButton.setSize(100, 30);
+
+        backButton.addActionListener(e -> {
+            if (previousScreen != null) 
+            {
+                previousScreen.setVisible(true);
+            } 
+            else 
+            {
+                new AdminHomeScreen();
+            }
+            dispose();
+        });
+
+        add(backButton);
 
         JLabel title = new JLabel("🎬 Gerenciar Gêneros");
         title.setFont(new Font("SansSerif", Font.BOLD, 28));
@@ -72,16 +87,11 @@ public class MovieGenderManagerScreen extends JFrame
         JButton updateButton = createButton("Atualizar", 530, 120);
         JButton deleteButton = createButton("Excluir", 530, 160);
         JButton clearButton = createButton("Limpar", 530, 200);
-        
-        // Botão "Voltar" no canto superior direito
-        JButton backButton = createButton("Voltar", 870, 10);
-        backButton.setSize(100, 30);
 
         add(addButton);
         add(updateButton);
         add(deleteButton);
         add(clearButton);
-        add(backButton);
 
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"ID", "Nome", "Descrição"});
@@ -101,16 +111,11 @@ public class MovieGenderManagerScreen extends JFrame
         updateButton.addActionListener(e -> updateGenre());
         deleteButton.addActionListener(e -> deleteGenre());
         clearButton.addActionListener(e -> clearFields());
-        
-        backButton.addActionListener(e -> {
-            if (previousScreen != null) {
-                previousScreen.setVisible(true);
-            }
-            dispose();
-        });
 
-        genreTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        genreTable.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent e) 
+            {
                 int row = genreTable.getSelectedRow();
                 selectedGenreId = Integer.parseInt(tableModel.getValueAt(row, 0).toString());
                 nameField.setText(tableModel.getValueAt(row, 1).toString());
@@ -136,16 +141,22 @@ public class MovieGenderManagerScreen extends JFrame
 
     private void loadGenres() {
         tableModel.setRowCount(0);
-        try {
+        try 
+        {
             ResultSet rs = genderDAO.list("");
-            while (rs.next()) {
-                tableModel.addRow(new Object[]{
+
+            while (rs.next()) 
+            {
+                tableModel.addRow(new Object[]
+                {
                     rs.getInt("id_genero"),
                     rs.getString("nomeGenero"),
                     rs.getString("descricaoGenero")
                 });
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
     }
@@ -167,6 +178,7 @@ public class MovieGenderManagerScreen extends JFrame
             nameField.getText().trim(),
             descriptionArea.getText().trim()
         );
+        
         genderDAO.insert(genre);
         loadGenres();
         clearFields();

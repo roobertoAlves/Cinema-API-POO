@@ -19,7 +19,7 @@ public class BomboniereProducts
 
     public BomboniereProducts() 
     {
-        // Default constructor
+
     }
     public BomboniereProducts( int idProduct, String name, double price, String availability ) 
     {
@@ -61,7 +61,7 @@ public class BomboniereProducts
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -86,7 +86,7 @@ public class BomboniereProducts
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdProduct() 
     {

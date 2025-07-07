@@ -19,7 +19,7 @@ public class Purchase
 
     public Purchase() 
     {
-        // Default constructor
+
     }
     public Purchase( int idPurchase, int clientId, int employeeId, String purchaseDate, double totalValue ) 
     {
@@ -62,7 +62,7 @@ public class Purchase
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -89,7 +89,7 @@ public class Purchase
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdPurchase() 
     {

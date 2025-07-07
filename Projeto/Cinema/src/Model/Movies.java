@@ -23,7 +23,7 @@ public class Movies
 
     public Movies() 
     {
-        // Default constructor
+
     }
     public Movies( int movieId, String movieTitle, String movieRating, String movieDuration, String movieType, 
                     String movieLanguage, String movieDubbing, String movieSubtitle, String movieDistributor ) 
@@ -82,7 +82,7 @@ public class Movies
 	{
 		return ( dbQuery.select("") );
 	}
-    // To string and to Array methods
+
 
 public String toString() 
 	{
@@ -113,7 +113,7 @@ public String toString()
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getMovieId() 
     {

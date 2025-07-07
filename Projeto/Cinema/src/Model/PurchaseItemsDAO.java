@@ -24,29 +24,21 @@ public class PurchaseItemsDAO
 	}
 
 	public int insert(  PurchaseItems items ) 
-    {
-		try 
+    {        try 
         {
 			int linesAfected = 0;
 
-			if ( items.getIdItem() > 0 ) 
-            {
-               String cmd = "INSERT INTO bdcinema.tbitenscompra (compra_id, produto_id, quantidade," + 
-            		   		"precoUnitario) VALUES (" 
-            		   + items.getPurchaseId() + ", " 
-            		   + items.getProductId() + ", "
-            		   + items.getQuantity() + ", "
-            		   + items.getUnitPrice() + ")";
-               
+			String cmd = "INSERT INTO bdcinema.tbitenscompra (compra_id, produto_id, quantidade," +
+        		   		"precoUnitario) VALUES (" 
+        		   + items.getPurchaseId() + ", " 
+        		   + items.getProductId() + ", "
+        		   + items.getQuantity() + ", "
+        		   + items.getUnitPrice() + ")";
+           
 
-				linesAfected = dbLink.executeUpdate(cmd);
+			linesAfected = dbLink.executeUpdate(cmd);
 
-				return linesAfected;
-			}
-            else
-            {
-				return 0;
-			}
+			return linesAfected;
 		} 
         catch (SQLException e) 
         {
@@ -90,12 +82,9 @@ public class PurchaseItemsDAO
     {
 		try 
         {
-			int linesAfected = 0;
-
-			if ( items.getIdItem() > 0 ) 
+			int linesAfected = 0;            if ( items.getIdItem() > 0 ) 
             {
-                String cmd = "DELETE FROM bdcinema.tbitenscompra";
-					   cmd += "WHERE id_item = " + items.getIdItem();
+                String cmd = "DELETE FROM bdcinema.tbitenscompra WHERE id_item = " + items.getIdItem();
 
 				linesAfected = dbLink.executeUpdate(cmd);
 
@@ -116,7 +105,7 @@ public class PurchaseItemsDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_item, compra_id, produto_id, quantidade, precoUnitario" + 
+        String cmd = "SELECT id_item, compra_id, produto_id, quantidade, precoUnitario " + 
         			 "FROM bdcinema.tbitenscompra";
         
         if ( !where.isEmpty() )  

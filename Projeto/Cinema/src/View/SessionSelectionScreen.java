@@ -5,21 +5,16 @@ import Model.RoomsDAO;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SessionSelectionScreen extends JFrame {
-    private int movieId;
-    private JFrame previousScreen;
     private MovieSessionsDAO sessionDAO = new MovieSessionsDAO();
     private RoomsDAO roomDAO = new RoomsDAO();
 
 
-    public SessionSelectionScreen(int movieId, JFrame previousScreen) {
-        this.movieId = movieId;
-        this.previousScreen = previousScreen;
-
+    public SessionSelectionScreen(int movieId, JFrame previousScreen) 
+    {
         setTitle("Escolha uma Sessão");
         setSize(600, 400);
         setLocationRelativeTo(null);
@@ -38,39 +33,43 @@ public class SessionSelectionScreen extends JFrame {
         scroll.setBorder(null);
         add(scroll, BorderLayout.CENTER);
 
-        // Painel para botões de ação
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(new Color(18, 18, 30));
 
-        // Botão Voltar
         JButton backButton = new JButton("← Voltar");
         backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         backButton.setBackground(new Color(70, 70, 90));
         backButton.setForeground(Color.WHITE);
         backButton.setFocusPainted(false);
+
         backButton.addActionListener(e -> {
-            if (previousScreen != null) {
+            if (previousScreen != null) 
+            {
                 previousScreen.setVisible(true);
             }
             dispose();
         });
+
         buttonPanel.add(backButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
-        try {
+        try 
+        {
             ResultSet rs = sessionDAO.list("filme_id = " + movieId);
             boolean hasSessions = false;
 
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 hasSessions = true;
                 int sessionId = rs.getInt("id_sessao");
                 String time = rs.getString("horarioInicio");
                 String duration = rs.getString("duracaoFilme");
                 int roomId = rs.getInt("sala_id");
                 String roomLabel = getRoomNumberById(roomId);
+                String capacityInfo = getAvailableCapacity(roomId);
 
-                JButton btn = new JButton("Sala: " + roomLabel + " | Horário: " + time + " | Duração: " + duration);
+                JButton btn = new JButton("Sala: " + roomLabel + " | Horário: " + time + " | Duração: " + duration + " | " + capacityInfo);
                 btn.setAlignmentX(Component.CENTER_ALIGNMENT);
                 btn.setBackground(new Color(130, 30, 200));
                 btn.setForeground(Color.WHITE);
@@ -78,22 +77,29 @@ public class SessionSelectionScreen extends JFrame {
                 btn.setFont(new Font("SansSerif", Font.BOLD, 16));
 
                 btn.addActionListener(e -> {
-                    new SeatAndTicketSelectionScreen(sessionId, this); // Envia a sessão escolhida
+                    
+                    new SeatAndTicketSelectionScreen(sessionId, this); 
                     setVisible(false);
+
                 });
 
                 sessionPanel.add(Box.createVerticalStrut(10));
                 sessionPanel.add(btn);
             }
+            
+            rs.close();
 
-            if (!hasSessions) {
+            if (!hasSessions) 
+            {
                 JLabel noSessions = new JLabel("⚠️ Nenhuma sessão disponível para este filme.", SwingConstants.CENTER);
                 noSessions.setFont(new Font("SansSerif", Font.PLAIN, 18));
                 noSessions.setForeground(Color.LIGHT_GRAY);
                 add(noSessions, BorderLayout.CENTER);
             }
 
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             JOptionPane.showMessageDialog(this, "Erro ao carregar sessões.");
             e.printStackTrace();
         }
@@ -101,15 +107,57 @@ public class SessionSelectionScreen extends JFrame {
         setVisible(true);
     }
 
-    private String getRoomNumberById(int roomId) {
-        try {
+    private String getRoomNumberById(int roomId) 
+    {
+        try 
+        {
             ResultSet rs = roomDAO.list("id_sala = " + roomId);
-            if (rs.next()) {
-                return "Sala " + rs.getString("numeroSala");
+            if (rs.next()) 
+            {
+                String roomNumber = "Sala " + rs.getString("numeroSala");
+                rs.close();
+                return roomNumber;
             }
-        } catch (SQLException e) {
+            rs.close();
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
         return "Sala " + roomId;
+    }    
+    
+    private String getAvailableCapacity(int roomId) 
+    {
+        try 
+        {
+            ResultSet rs = roomDAO.list("id_sala = " + roomId);
+            if (rs.next()) 
+            {
+                int maxCapacity = rs.getInt("capacidadeMaxima");
+                int currentCapacity = rs.getInt("capacidadeAtual");
+                int availableSeats = maxCapacity - currentCapacity;
+                
+                
+                if (currentCapacity < 0) 
+                {
+                    currentCapacity = 0; 
+                }
+                
+                if (availableSeats < 0) 
+                {
+                    availableSeats = 0;
+                }
+                
+                rs.close();
+                return "Disponível: " + availableSeats + "/" + maxCapacity;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        
+        return "Capacidade: N/A";
     }
 }

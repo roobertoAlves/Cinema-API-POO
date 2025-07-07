@@ -150,5 +150,60 @@ public class RoomsDAO
 			return 0;
 		}
 	}
+    
+    public int resetAllRoomsCapacity() 
+    {
+        try 
+        {
+            String cmd = "UPDATE bdcinema.tbsalas SET capacidadeAtual = 0";
+            int linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
+    public boolean hasAvailableSeats(int roomId) 
+    {
+        try 
+        {
+            ResultSet rs = list("id_sala = " + roomId);
+            if (rs.next()) 
+            {
+                int maxCapacity = rs.getInt("capacidadeMaxima");
+                int occupiedSeats = rs.getInt("capacidadeAtual");
+                rs.close();
+                return occupiedSeats < maxCapacity;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int getAvailableSeats(int roomId) 
+    {
+        try 
+        {
+            ResultSet rs = list("id_sala = " + roomId);
+            if (rs.next()) 
+            {
+                int maxCapacity = rs.getInt("capacidadeMaxima");
+                int occupiedSeats = rs.getInt("capacidadeAtual");
+                rs.close();
+                return Math.max(0, maxCapacity - occupiedSeats);
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

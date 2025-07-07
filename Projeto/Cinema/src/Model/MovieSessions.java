@@ -19,7 +19,7 @@ public class MovieSessions
 
     public MovieSessions() 
     {
-        // Default constructor
+
     }
     public MovieSessions( int idSession, int movieId, int roomId, String startTime, String movieDuration ) 
     {
@@ -65,7 +65,7 @@ public class MovieSessions
 	{
 		return ( dbQuery.select("") );
 	}
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -92,7 +92,7 @@ public class MovieSessions
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdSession() 
     {

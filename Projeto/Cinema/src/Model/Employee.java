@@ -20,7 +20,7 @@ public class Employee
 
     public Employee() 
     {
-        // Default constructor
+
     }
     public Employee(int idEmployee, String name, String position, String cpf, String email, String phone) 
     {
@@ -67,7 +67,7 @@ public class Employee
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -96,7 +96,7 @@ public class Employee
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdEmployee() 
     {

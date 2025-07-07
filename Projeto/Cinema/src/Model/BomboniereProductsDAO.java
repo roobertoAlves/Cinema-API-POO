@@ -28,22 +28,13 @@ public class BomboniereProductsDAO
         {
             int linesAffected = 0;
 
-            if (product.getIdProduct() > 0) 
-            {
-                String cmd = "INSERT INTO bdcinema.tbprodutosb (id_produto, nome, preco," + 
-                		 	 "estoqueDisponivel) VALUES ("
-                    + product.getIdProduct() + ", '"
-                    + product.getName() + "', "
-                    + product.getPrice() + ", '"
-                    + product.getAvailability() + "')";
+            String cmd = "INSERT INTO bdcinema.tbprodutosb (nome, preco, estoqueDisponivel) VALUES ('"
+                + product.getName() + "', "
+                + product.getPrice() + ", '"
+                + product.getAvailability() + "')";
 
-                linesAffected = dbLink.executeUpdate(cmd);
-                return linesAffected;
-            } 
-            else 
-            {
-                return 0;
-            }
+            linesAffected = dbLink.executeUpdate(cmd);
+            return linesAffected;
         } 
         catch (SQLException e) 
         {
@@ -60,7 +51,7 @@ public class BomboniereProductsDAO
 
 			if (product.getIdProduct() > 0) 
 			{
-				String cmd = "UPDATE bdcinema.tbprodutosb SET" + 
+				String cmd = "UPDATE bdcinema.tbprodutosb SET " + 
 					"nome = '" + product.getName() + "', " +
 					"preco = " + product.getPrice() + ", " +
 					"estoqueDisponivel = '" + product.getAvailability() + "' " +
@@ -89,8 +80,7 @@ public class BomboniereProductsDAO
 
             if (product.getIdProduct() > 0) 
             {
-                String cmd = "DELETE FROM bdcinema.tbprodutosb";
-                	   cmd += "WHERE id_produto = " + product.getIdProduct();
+                String cmd = "DELETE FROM bdcinema.tbprodutosb WHERE id_produto = " + product.getIdProduct();
 
                 linesAffected = dbLink.executeUpdate(cmd);
                 return linesAffected;

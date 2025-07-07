@@ -2,7 +2,6 @@ package View;
 
 import Model.Movies;
 import Model.MoviesDAO;
-import Model.MovieGender;
 import Model.MovieGenderDAO;
 
 import javax.swing.*;
@@ -12,19 +11,20 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MovieManagerScreen extends JFrame {
+public class MovieManagerScreen extends JFrame 
+{
     private JTable movieTable;
     private DefaultTableModel tableModel;
     private JTextField titleField, ratingField, durationField, languageField, distributorField;
     private JComboBox<String> typeCombo, dubbingCombo, subtitleCombo, genreCombo;
+
     private MoviesDAO movieDAO = new MoviesDAO();
     private MovieGenderDAO genreDAO = new MovieGenderDAO();
+
     private int selectedMovieId = 0;
-    private JFrame previousScreen;
 
-
-    public MovieManagerScreen(JFrame previousScreen) {
-        this.previousScreen = previousScreen;
+    public MovieManagerScreen(JFrame previousScreen) 
+    {
         setTitle("Gerenciar Filmes - CinePlay");
         setSize(1000, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,18 +33,22 @@ public class MovieManagerScreen extends JFrame {
         getContentPane().setBackground(new Color(18, 18, 30));
         setIconImage(Toolkit.getDefaultToolkit().getImage("src/Assets/cineplay.png"));
 
-        // Botão "Voltar" no canto superior direito
+
         JButton backButton = createButton("Voltar", 870, 10);
         backButton.setSize(100, 30);
+
         backButton.addActionListener(e -> {
-            if (previousScreen != null) {
+            if (previousScreen != null) 
+            {
                 previousScreen.setVisible(true);
             }
+            
             dispose();
         });
+
         add(backButton);
 
-        // Título centralizado
+
         JLabel screenTitle = new JLabel("🎬 Gerenciador de Filmes");
         screenTitle.setFont(new Font("SansSerif", Font.BOLD, 32));
         screenTitle.setForeground(new Color(160, 64, 255));
@@ -76,7 +80,8 @@ public class MovieManagerScreen extends JFrame {
         add(clearButton);
 
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new String[]{
+        tableModel.setColumnIdentifiers(new String[]
+        {
             "ID", "Título", "Classificação", "Duração", "Tipo", "Idioma", "Dublagem", "Legenda", "Distribuidor"
         });
 
@@ -95,8 +100,10 @@ public class MovieManagerScreen extends JFrame {
         deleteButton.addActionListener(e -> deleteMovie());
         clearButton.addActionListener(e -> clearFields());
 
-        movieTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        movieTable.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent e) 
+            {
                 int row = movieTable.getSelectedRow();
                 selectedMovieId = Integer.parseInt(tableModel.getValueAt(row, 0).toString());
                 titleField.setText(tableModel.getValueAt(row, 1).toString());
@@ -114,7 +121,8 @@ public class MovieManagerScreen extends JFrame {
         setVisible(true);
     }
 
-    private JTextField createField(String label, int x, int y) {
+    private JTextField createField(String label, int x, int y) 
+    {
         JLabel lbl = new JLabel(label + ":");
         lbl.setForeground(Color.WHITE);
         lbl.setBounds(x, y, 120, 25);
@@ -130,7 +138,8 @@ public class MovieManagerScreen extends JFrame {
         return txt;
     }
 
-    private JComboBox<String> createCombo(String label, String[] options, int x, int y) {
+    private JComboBox<String> createCombo(String label, String[] options, int x, int y) 
+    {
         JLabel lbl = new JLabel(label + ":");
         lbl.setForeground(Color.WHITE);
         lbl.setBounds(x, y, 120, 25);
@@ -145,7 +154,8 @@ public class MovieManagerScreen extends JFrame {
         return combo;
     }
 
-    private JComboBox<String> createGenreCombo(String label, int x, int y) {
+    private JComboBox<String> createGenreCombo(String label, int x, int y) 
+    {
         JLabel lbl = new JLabel(label + ":");
         lbl.setForeground(Color.WHITE);
         lbl.setBounds(x, y, 120, 25);
@@ -157,12 +167,17 @@ public class MovieManagerScreen extends JFrame {
         combo.setBackground(new Color(40, 40, 60));
         combo.setForeground(Color.WHITE);
 
-        try {
+        try 
+        {
             ResultSet rs = genreDAO.list("");
-            while (rs.next()) {
+
+            while (rs.next()) 
+            {
                 combo.addItem(rs.getString("nomeGenero"));
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
 
@@ -170,7 +185,8 @@ public class MovieManagerScreen extends JFrame {
         return combo;
     }
 
-    private JButton createButton(String text, int x, int y) {
+    private JButton createButton(String text, int x, int y) 
+    {
         JButton btn = new JButton(text);
         btn.setBounds(x, y, 100, 35);
         btn.setFocusPainted(false);
@@ -182,11 +198,15 @@ public class MovieManagerScreen extends JFrame {
         return btn;
     }
 
-    private void loadMovies() {
+    private void loadMovies() 
+    {
         tableModel.setRowCount(0);
-        try {
+        try 
+        {
             ResultSet rs = movieDAO.list("");
-            while (rs.next()) {
+
+            while (rs.next()) 
+            {
                 tableModel.addRow(new Object[]{
                     rs.getInt("id_filme"),
                     rs.getString("titulo"),
@@ -199,19 +219,24 @@ public class MovieManagerScreen extends JFrame {
                     rs.getString("distribuidor")
                 });
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
     }
 
-    private boolean validateFields() {
+    private boolean validateFields() 
+    {
         return !(titleField.getText().isEmpty() || ratingField.getText().isEmpty()
                 || durationField.getText().isEmpty() || languageField.getText().isEmpty()
                 || distributorField.getText().isEmpty());
     }
 
-    private void addMovie() {
-        if (!validateFields()) {
+    private void addMovie() 
+    {
+        if (!validateFields()) 
+        {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios.");
             return;
         }
@@ -222,13 +247,17 @@ public class MovieManagerScreen extends JFrame {
             dubbingCombo.getSelectedItem().toString(), subtitleCombo.getSelectedItem().toString(),
             distributorField.getText()
         );
+
         movieDAO.insert(movie);
+
         loadMovies();
         clearFields();
     }
 
-    private void updateMovie() {
-        if (!validateFields() || selectedMovieId == 0) {
+    private void updateMovie() 
+    {
+        if (!validateFields() || selectedMovieId == 0) 
+        {
             JOptionPane.showMessageDialog(this, "Selecione um filme para atualizar.");
             return;
         }
@@ -239,13 +268,16 @@ public class MovieManagerScreen extends JFrame {
             dubbingCombo.getSelectedItem().toString(), subtitleCombo.getSelectedItem().toString(),
             distributorField.getText()
         );
+
         movieDAO.update(movie);
         loadMovies();
         clearFields();
     }
 
-    private void deleteMovie() {
-        if (selectedMovieId == 0) {
+    private void deleteMovie() 
+    {
+        if (selectedMovieId == 0) 
+        {
             JOptionPane.showMessageDialog(this, "Selecione um filme para excluir.");
             return;
         }
@@ -257,7 +289,8 @@ public class MovieManagerScreen extends JFrame {
         clearFields();
     }
 
-    private void clearFields() {
+    private void clearFields() 
+    {
         selectedMovieId = 0;
         titleField.setText("");
         ratingField.setText("");

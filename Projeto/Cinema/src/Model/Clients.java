@@ -22,7 +22,7 @@ public class Clients
 
     public Clients() 
     {
-        // Default constructor
+
     }
     public Clients( int idClient, String name, String email, String password, String cpf, String phone, String loyaltyProfile, int points ) 
     {
@@ -72,7 +72,7 @@ public class Clients
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -104,7 +104,7 @@ public class Clients
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdClient() 
     {

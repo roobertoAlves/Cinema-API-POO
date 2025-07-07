@@ -19,7 +19,7 @@ public class Marketing
 
     public Marketing() 
     {
-        // Default constructor
+
     }
     public Marketing( int idCampaign, String campaignName, String startCampaign, String endCampaign, int campaignImpact ) 
     {
@@ -63,7 +63,7 @@ public class Marketing
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -90,7 +90,7 @@ public class Marketing
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdCampaign() 
     {

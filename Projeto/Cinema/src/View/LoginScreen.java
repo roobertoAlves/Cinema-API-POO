@@ -6,12 +6,14 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
-public class LoginScreen extends JFrame {
+public class LoginScreen extends JFrame 
+{
     private JTextField userField;
     private JPasswordField passField;
     private JButton loginButton;
 
-    public LoginScreen() {
+    public LoginScreen() 
+    {
         setTitle("Login - Sistema de Cinema");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -73,28 +75,33 @@ public class LoginScreen extends JFrame {
         loginButton.setBorder(BorderFactory.createLineBorder(new Color(130, 30, 200), 2, true));
         loginButton.setContentAreaFilled(false);
         loginButton.setOpaque(true);
-        loginButton.setBorder(new RoundedBorder(20)); // Borda arredondada
+        loginButton.setBorder(new RoundedBorder(20));
         panel.add(loginButton);
 
-        // Hover effect
-        loginButton.addMouseListener(new MouseAdapter() {
+
+        loginButton.addMouseListener(new MouseAdapter() 
+        {
             @Override
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent e) 
+            {
                 loginButton.setBackground(new Color(180, 90, 255));
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent e) 
+            {
                 loginButton.setBackground(new Color(160, 64, 255));
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent e) 
+            {
                 loginButton.setBackground(new Color(120, 30, 200));
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) 
+            {
                 loginButton.setBackground(new Color(180, 90, 255));
             }
         });
@@ -103,7 +110,8 @@ public class LoginScreen extends JFrame {
             String username = userField.getText();
             String password = new String(passField.getPassword());
 
-            if (username.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty()) 
+            {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos.");
             } 
             else if (username.equals("admin") && password.equals("admin")) 
@@ -128,29 +136,30 @@ public class LoginScreen extends JFrame {
         setVisible(true);
     }
 
-    // Classe de borda arredondada
-    class RoundedBorder implements Border {
+
+    class RoundedBorder implements Border 
+    {
         private int radius;
 
-        RoundedBorder(int radius) {
+        RoundedBorder(int radius) 
+        {
             this.radius = radius;
         }
 
-        public Insets getBorderInsets(Component c) {
+        public Insets getBorderInsets(Component c) 
+        {
             return new Insets(radius, radius, radius, radius);
         }
 
-        public boolean isBorderOpaque() {
+        public boolean isBorderOpaque() 
+        {
             return false;
         }
 
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
+        {
             g.setColor(new Color(130, 30, 200));
             g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
         }
-    }
-
-    public static void main(String[] args) {
-        new LoginScreen();
     }
 }

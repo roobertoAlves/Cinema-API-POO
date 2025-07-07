@@ -76,8 +76,6 @@ public class Rooms
 		return ( dbQuery.select("") );
 	}
 
-	// TO STRING & TO ARRAY
-
 	public String toString() 
 	{
 		return(
@@ -106,8 +104,6 @@ public class Rooms
 
 		return arrayStr;	
 	}
-
-    // Getters and Setters
 
     public int getRoomId() 
     {

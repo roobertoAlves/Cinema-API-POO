@@ -24,28 +24,22 @@ public class PurchaseDAO
 	}
 
 	public int insert(  Purchase purchase ) 
-    {
-		try 
+    {        try 
         {
 			int linesAfected = 0;
 
-			if ( purchase.getIdPurchase() > 0 ) 
-            {
-               String cmd = "INSERT INTO bdcinema.tbcompras (cliente_id, funcionario_id, " + 
-            		   		"dataCompra, valorTotal) VALUES ("
-            		   		+ purchase.getClientId() + ", "
-            		   		+ purchase.getEmployeeId() + ", '"
-            		   		+ purchase.getPurchaseDate() + "', "
-            		   		+ purchase.getTotalValue() + ")";
+			String employeeIdValue = purchase.getEmployeeId() == 0 ? "NULL" : String.valueOf(purchase.getEmployeeId());
+			
+			String cmd = "INSERT INTO bdcinema.tbcompras (cliente_id, funcionario_id, " + 
+        		   		"dataCompra, valorTotal) VALUES ("
+        		   		+ purchase.getClientId() + ", "
+        		   		+ employeeIdValue + ", '"
+        		   		+ purchase.getPurchaseDate() + "', "
+        		   		+ purchase.getTotalValue() + ")";
 
-				linesAfected = dbLink.executeUpdate( cmd );
+			linesAfected = dbLink.executeUpdate( cmd );
 
-				return linesAfected;
-			}
-            else
-            {
-				return 0;
-			}
+			return linesAfected;
 		} 
         catch ( SQLException e ) 
         {
@@ -62,7 +56,7 @@ public class PurchaseDAO
 
 			if ( purchase.getIdPurchase() > 0 ) 
 			{
-				String cmd = "UPDATE bdcinema.tbcompras SET" + 
+				String cmd = "UPDATE bdcinema.tbcompras SET " + 
 							 "cliente_id = " + purchase.getClientId() +
 							 ", funcionario_id = " + purchase.getEmployeeId() +
 							 ", dataCompra = '" + purchase.getPurchaseDate() +
@@ -89,12 +83,9 @@ public class PurchaseDAO
     {
 		try 
         {
-			int linesAfected = 0;
-
-			if ( purchase.getIdPurchase() > 0 ) 
+			int linesAfected = 0;            if ( purchase.getIdPurchase() > 0 ) 
             {
-                String cmd = "DELETE bdcinema.tbcompras";
-					   cmd += "WHERE id_compra = " + purchase.getIdPurchase();
+                String cmd = "DELETE FROM bdcinema.tbcompras WHERE id_compra = " + purchase.getIdPurchase();
 
 				linesAfected = dbLink.executeUpdate( cmd );
 
@@ -115,7 +106,7 @@ public class PurchaseDAO
 
 	public ResultSet list( String where ) 
     {
-        String cmd = "SELECT id_compra, cliente_id, funcionario_id, dataCompra," + 
+        String cmd = "SELECT id_compra, cliente_id, funcionario_id, dataCompra, " + 
         			 "valorTotal FROM bdcinema.tbcompras";
         
         if ( !where.isEmpty() ) 
@@ -135,5 +126,31 @@ public class PurchaseDAO
 		}
         
 		return rs;
+	}
+	
+	public int insertAndGetId(Purchase purchase) {
+		try {
+			String employeeIdValue = purchase.getEmployeeId() == 0 ? "NULL" : String.valueOf(purchase.getEmployeeId());
+			
+			String cmd = "INSERT INTO bdcinema.tbcompras (cliente_id, funcionario_id, " + 
+        		   		"dataCompra, valorTotal) VALUES ("
+        		   		+ purchase.getClientId() + ", "
+        		   		+ employeeIdValue + ", '"
+        		   		+ purchase.getPurchaseDate() + "', "
+        		   		+ purchase.getTotalValue() + ")";
+
+			int linesAffected = dbLink.executeUpdate(cmd, Statement.RETURN_GENERATED_KEYS);
+			
+			if (linesAffected > 0) {
+				ResultSet generatedKeys = dbLink.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					return generatedKeys.getInt(1);
+				}
+			}
+			return 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
 	} 
 }

@@ -21,7 +21,7 @@ public class MovieTickets
 
     public MovieTickets() 
     {
-        // Default constructor
+
     }
     public MovieTickets( int idTicket, int sessionId, int clientId, int seatNumber, double price, String ticketType ) 
     {
@@ -67,7 +67,7 @@ public class MovieTickets
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -96,7 +96,7 @@ public class MovieTickets
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdTicket() 
     {

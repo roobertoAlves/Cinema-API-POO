@@ -45,7 +45,7 @@ public class MoviesComments
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -74,7 +74,7 @@ public class MoviesComments
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdComementary() 
     {

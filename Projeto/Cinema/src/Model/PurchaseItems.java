@@ -19,7 +19,7 @@ public class PurchaseItems
 
     public PurchaseItems() 
     {
-        // Default constructor
+
     }
     public PurchaseItems( int idItem, int purchaseId, int productId, int quantity, double unitPrice ) 
     {
@@ -61,7 +61,7 @@ public class PurchaseItems
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -88,7 +88,7 @@ public class PurchaseItems
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdItem() 
     {

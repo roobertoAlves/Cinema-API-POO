@@ -19,7 +19,6 @@ public class TechRequest
 
     public TechRequest() 
     {
-        // Default constructor
     }
 
     public TechRequest( int idRequest, String description, String status, String openData, int roomId ) 
@@ -64,8 +63,6 @@ public class TechRequest
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
-
     public String toString() 
 	{
 		return(
@@ -90,8 +87,6 @@ public class TechRequest
 
 		return arrayStr;	
 	}
-
-    // Getters and Setters
 
     public int getIdRequest() 
     {

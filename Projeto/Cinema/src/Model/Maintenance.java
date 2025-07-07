@@ -20,7 +20,7 @@ public class Maintenance
 
     public Maintenance() 
     {
-        // Default constructor
+
     }
     public Maintenance( int idMaintenance, int roomId, String description, String startDate, String endDate, int employeeId ) 
     {
@@ -64,7 +64,7 @@ public class Maintenance
 		return ( dbQuery.select("") );
 	}
 
-    // To string and to Array methods
+
 
     public String toString() 
 	{
@@ -93,7 +93,7 @@ public class Maintenance
 		return arrayStr;	
 	}
 
-    // Getters and Setters
+
 
     public int getIdMaintenance() 
     {

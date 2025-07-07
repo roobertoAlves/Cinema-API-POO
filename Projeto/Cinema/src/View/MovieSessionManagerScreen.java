@@ -14,21 +14,21 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class MovieSessionManagerScreen extends JFrame {
+public class MovieSessionManagerScreen extends JFrame 
+{
     private JComboBox<String> movieCombo, roomCombo;
     private JFormattedTextField timeField, durationField;
     private JTable sessionTable;
     private DefaultTableModel tableModel;
+
     private MovieSessionsDAO sessionDAO = new MovieSessionsDAO();
     private MoviesDAO movieDAO = new MoviesDAO();
     private RoomsDAO roomDAO = new RoomsDAO();
-    private int selectedSessionId = 0;
-    private JFrame previousScreen;
 
+    private int selectedSessionId = 0;
 
     public MovieSessionManagerScreen(JFrame previousScreen) 
     {
-        this.previousScreen = previousScreen;
         setTitle("Gerenciar Sessões - CinePlay");
         setSize(1000, 750);
         setLocationRelativeTo(null);
@@ -37,14 +37,20 @@ public class MovieSessionManagerScreen extends JFrame {
 
         JButton backButton = createButton("Voltar", 870, 10);
         backButton.setSize(100, 30);
+
         backButton.addActionListener(e -> {
-            if (previousScreen != null) {
+            if (previousScreen != null) 
+            {
                 previousScreen.setVisible(true);
-            } else {
+            } 
+            else 
+            {
                 new AdminHomeScreen();
             }
+
             dispose();
         });
+
         add(backButton);
 
         JLabel title = new JLabel("🎥 Gerenciamento de Sessões");
@@ -66,7 +72,9 @@ public class MovieSessionManagerScreen extends JFrame {
         add(deleteButton);
 
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new String[]{
+
+        tableModel.setColumnIdentifiers(new String[]
+        {
             "ID", "Filme", "Sala", "Horário", "Duração"
         });
 
@@ -80,8 +88,10 @@ public class MovieSessionManagerScreen extends JFrame {
         scroll.setBounds(50, 360, 880, 300);
         add(scroll);
 
-        sessionTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        sessionTable.addMouseListener(new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent e) 
+            {
                 int row = sessionTable.getSelectedRow();
                 selectedSessionId = Integer.parseInt(tableModel.getValueAt(row, 0).toString());
                 timeField.setText(tableModel.getValueAt(row, 3).toString());
@@ -101,14 +111,16 @@ public class MovieSessionManagerScreen extends JFrame {
         setVisible(true);
     }
 
-    private JFormattedTextField createField(String label, int x, int y, String pattern) {
+    private JFormattedTextField createField(String label, int x, int y, String pattern) 
+    {
         JLabel lbl = new JLabel(label);
         lbl.setBounds(x, y, 230, 25);
         lbl.setForeground(Color.WHITE);
         lbl.setFont(new Font("SansSerif", Font.BOLD, 14));
         add(lbl);
 
-        try {
+        try 
+        {
             MaskFormatter formatter = new MaskFormatter(pattern);
             formatter.setPlaceholderCharacter('_');
             JFormattedTextField field = new JFormattedTextField(formatter);
@@ -118,14 +130,18 @@ public class MovieSessionManagerScreen extends JFrame {
             field.setCaretColor(Color.WHITE);
             field.setFont(new Font("SansSerif", Font.PLAIN, 14));
             add(field);
+
             return field;
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
             return new JFormattedTextField();
         }
     }
 
-    private JComboBox<String> createCombo(String label, int x, int y) {
+    private JComboBox<String> createCombo(String label, int x, int y) 
+    {
         JLabel lbl = new JLabel(label);
         lbl.setBounds(x, y, 140, 25);
         lbl.setForeground(Color.WHITE);
@@ -141,7 +157,8 @@ public class MovieSessionManagerScreen extends JFrame {
         return combo;
     }
 
-    private JButton createButton(String text, int x, int y) {
+    private JButton createButton(String text, int x, int y) 
+    {
         JButton btn = new JButton(text);
         btn.setBounds(x, y, 150, 35);
         btn.setFocusPainted(false);
@@ -151,13 +168,16 @@ public class MovieSessionManagerScreen extends JFrame {
         btn.setBorder(BorderFactory.createLineBorder(new Color(130, 30, 200), 2, true));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        btn.addMouseListener(new MouseAdapter() {
+        btn.addMouseListener(new MouseAdapter() 
+        {
             @Override
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(MouseEvent e) 
+            {
                 btn.setBackground(new Color(180, 90, 255));
             }
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(MouseEvent e) 
+            {
                 btn.setBackground(new Color(160, 64, 255));
             }
         });
@@ -165,50 +185,77 @@ public class MovieSessionManagerScreen extends JFrame {
         return btn;
     }
 
-    private void loadMovies() {
-        try {
+    private void loadMovies() 
+    {
+        try 
+        {
             ResultSet rs = movieDAO.list("");
-            while (rs.next()) {
+
+            while (rs.next())
+             {
                 String item = rs.getInt("id_filme") + " - " + rs.getString("titulo");
                 movieCombo.addItem(item);
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
     }
 
-    private void loadRooms() {
-        try {
+    private void loadRooms() 
+    {
+        try 
+        {
             ResultSet rs = roomDAO.list("");
-            while (rs.next()) {
+
+            while (rs.next()) 
+            {
                 String item = rs.getInt("id_sala") + " - Sala " + rs.getInt("numeroSala");
                 roomCombo.addItem(item);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
     }
 
-    private String getRoomLabelById(int roomId) {
-        try {
+    private String getRoomLabelById(int roomId) 
+    {
+        try 
+        {
             ResultSet rs = roomDAO.list("id_sala = " + roomId);
             String label = "Sala " + roomId;
-            if (rs.next()) {
+
+            if (rs.next()) 
+            {
                 label = "Sala " + rs.getInt("numeroSala");
             }
-            rs.close(); // Fechar o ResultSet
+
+            rs.close();
+
             return label;
-        } catch (SQLException e) {
+
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
+
         return "Sala " + roomId;
     }
 
-    private void loadSessions(String where) {
+    private void loadSessions(String where) 
+    {
         tableModel.setRowCount(0);
-        try {
+        try 
+        {
+
             ResultSet rs = sessionDAO.list(where);
-            while (rs.next()) {
+
+            while (rs.next()) 
+            {
                 int id = rs.getInt("id_sessao");
                 String movieTitle = getMovieTitleById(rs.getInt("filme_id"));
                 String roomLabel = getRoomLabelById(rs.getInt("sala_id"));
@@ -217,14 +264,18 @@ public class MovieSessionManagerScreen extends JFrame {
 
                 tableModel.addRow(new Object[]{id, movieTitle, roomLabel, time, duration});
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
     }
 
-    private void addSession() {
+    private void addSession() 
+    {
         if (movieCombo.getSelectedItem() == null || roomCombo.getSelectedItem() == null ||
-                timeField.getText().contains("_") || durationField.getText().contains("_")) {
+                timeField.getText().contains("_") || durationField.getText().contains("_")) 
+        {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos corretamente.");
             return;
         }
@@ -234,7 +285,8 @@ public class MovieSessionManagerScreen extends JFrame {
         String time = timeField.getText();
         String duration = durationField.getText();
 
-        if (hasConflict(roomId, time)) {
+        if (hasConflict(roomId, time)) 
+        {
             JOptionPane.showMessageDialog(this, "Já existe sessão nesta sala e horário.");
             return;
         }
@@ -246,8 +298,10 @@ public class MovieSessionManagerScreen extends JFrame {
         loadSessions("");
     }
 
-    private void updateSession() {
-        if (selectedSessionId == 0) {
+    private void updateSession() 
+    {
+        if (selectedSessionId == 0) 
+        {
             JOptionPane.showMessageDialog(this, "Selecione uma sessão para atualizar.");
             return;
         }
@@ -264,26 +318,29 @@ public class MovieSessionManagerScreen extends JFrame {
         loadSessions("");
     }
 
-    private void deleteSession() {
-        if (selectedSessionId == 0) {
+    private void deleteSession() 
+    {
+        if (selectedSessionId == 0) 
+        {
             JOptionPane.showMessageDialog(this, "Selecione uma sessão para excluir.");
             return;
         }
 
-        // Verificar se existem ingressos vendidos para esta sessão
-        try {
+
+        try 
+        {
             MovieTicketsDAO ticketsDAO = new MovieTicketsDAO();
             ResultSet ticketsRs = ticketsDAO.list("sessao_id = " + selectedSessionId);
             
-            // Coletar IDs dos ingressos em uma lista
             java.util.List<Integer> ticketIds = new java.util.ArrayList<>();
             
-            while (ticketsRs.next()) {
+            while (ticketsRs.next()) 
+            {
                 ticketIds.add(ticketsRs.getInt("id_ingresso"));
             }
             
-            if (!ticketIds.isEmpty()) {
-                // Se existem ingressos, perguntar se deseja excluir tudo
+            if (!ticketIds.isEmpty()) 
+            {
                 String message = "Esta sessão possui " + ticketIds.size() + " ingresso(s) vendido(s).\n" +
                                "Para excluir a sessão, é necessário excluir os ingressos primeiro.\n\n" +
                                "Deseja excluir TODOS os ingressos e a sessão?";
@@ -294,48 +351,61 @@ public class MovieSessionManagerScreen extends JFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
                 
-                if (confirm == JOptionPane.YES_OPTION) {
-                    // Primeiro excluir todos os ingressos usando os IDs coletados
-                    for (Integer ticketId : ticketIds) {
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+
+                    for (Integer ticketId : ticketIds) 
+                    {
                         MovieTickets ticket = new MovieTickets();
                         ticket.setIdTicket(ticketId);
                         ticketsDAO.delete(ticket);
                     }
                     
-                    // Depois excluir a sessão
+
                     MovieSessions session = new MovieSessions();
                     session.setIdSession(selectedSessionId);
                     int result = sessionDAO.delete(session);
                     
-                    if (result > 0) {
+                    if (result > 0) 
+                    {
                         JOptionPane.showMessageDialog(this, 
                             "Sessão e todos os ingressos foram excluídos com sucesso.");
-                    } else {
+                    } 
+                    else 
+                    {
                         JOptionPane.showMessageDialog(this, 
                             "Erro ao excluir a sessão.");
                     }
                 }
-            } else {
-                // Se não há ingressos, pode excluir normalmente
+            } 
+            else 
+            {
+
                 int confirm = JOptionPane.showConfirmDialog(this, 
                     "Deseja realmente excluir esta sessão?", 
                     "Confirmar exclusão", 
                     JOptionPane.YES_NO_OPTION);
                 
-                if (confirm == JOptionPane.YES_OPTION) {
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
                     MovieSessions session = new MovieSessions();
                     session.setIdSession(selectedSessionId);
                     int result = sessionDAO.delete(session);
                     
-                    if (result > 0) {
+                    if (result > 0) 
+                    {
                         JOptionPane.showMessageDialog(this, "Sessão excluída com sucesso.");
-                    } else {
+                    } 
+                    else 
+                    {
                         JOptionPane.showMessageDialog(this, "Erro ao excluir a sessão.");
                     }
                 }
             }
             
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             JOptionPane.showMessageDialog(this, 
                 "Erro ao verificar ingressos: " + e.getMessage(),
                 "Erro de Banco de Dados",
@@ -347,7 +417,8 @@ public class MovieSessionManagerScreen extends JFrame {
         loadSessions("");
     }
 
-    private void clearFields() {
+    private void clearFields() 
+    {
         selectedSessionId = 0;
         timeField.setText("");
         durationField.setText("");
@@ -355,72 +426,54 @@ public class MovieSessionManagerScreen extends JFrame {
         roomCombo.setSelectedIndex(0);
     }
 
-    private String getMovieTitleById(int movieId) {
-        try {
+    private String getMovieTitleById(int movieId) 
+    {
+        try 
+        {
             ResultSet rs = movieDAO.list("id_filme = " + movieId);
             String title = "Desconhecido";
-            if (rs.next()) {
+
+            if (rs.next()) 
+            {
                 title = rs.getString("titulo");
             }
-            rs.close(); // Fechar o ResultSet
+            rs.close();
             return title;
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
+
         return "Desconhecido";
     }
 
-    private boolean hasConflict(int roomId, String time) {
-        try {
+    private boolean hasConflict(int roomId, String time) 
+    {
+        try 
+        {
             ResultSet rs = sessionDAO.list("sala_id = " + roomId + " AND horarioInicio = '" + time + "'");
             boolean hasConflict = rs != null && rs.next();
-            if (rs != null) {
-                rs.close(); // Fechar o ResultSet
+
+            if (rs != null) 
+            {
+                rs.close();
             }
             return hasConflict;
-        } catch (SQLException e) {
-            return true; // Em caso de erro, assume conflito para ser mais seguro
+        } 
+        catch (SQLException e) 
+        {
+            return true;
         }
     }
 
-    private String getItemByName(JComboBox<String> combo, String name) {
-        for (int i = 0; i < combo.getItemCount(); i++) {
+    private String getItemByName(JComboBox<String> combo, String name) 
+    {
+        for (int i = 0; i < combo.getItemCount(); i++) 
+        {
             if (combo.getItemAt(i).contains(name)) return combo.getItemAt(i);
         }
+        
         return null;
-    }
-
-    /**
-     * Método auxiliar para verificar se uma sessão tem ingressos vendidos
-     */
-    private boolean sessionHasTickets(int sessionId) {
-        try {
-            MovieTicketsDAO ticketsDAO = new MovieTicketsDAO();
-            ResultSet rs = ticketsDAO.list("sessao_id = " + sessionId);
-            boolean hasTickets = rs.next(); // Se encontrou pelo menos um registro
-            rs.close(); // Fechar o ResultSet
-            return hasTickets;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return true; // Em caso de erro, assume que tem ingressos para ser mais seguro
-        }
-    }
-
-    /**
-     * Método auxiliar para contar quantos ingressos uma sessão possui
-     */
-    private int countSessionTickets(int sessionId) {
-        int count = 0;
-        try {
-            MovieTicketsDAO ticketsDAO = new MovieTicketsDAO();
-            ResultSet rs = ticketsDAO.list("sessao_id = " + sessionId);
-            while (rs.next()) {
-                count++;
-            }
-            rs.close(); // Fechar o ResultSet
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return count;
     }
 }

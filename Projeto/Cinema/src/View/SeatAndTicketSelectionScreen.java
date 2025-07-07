@@ -9,16 +9,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SeatAndTicketSelectionScreen extends JFrame 
 {
     private int sessionId;
     private JFrame previousScreen;
-    private String selectedSeat = "";
+    private List<String> selectedSeats = new ArrayList<>();
     private double selectedPrice = 20.00;
-    private JLabel priceLabel, sessionInfoLabel;
+    private JLabel priceLabel, sessionInfoLabel, selectedSeatsLabel;
     private JComboBox<String> ticketTypeCombo;
     private JPanel seatPanel;
 
@@ -43,13 +45,12 @@ public class SeatAndTicketSelectionScreen extends JFrame
             return;
         }
 
-        setTitle("Selecionar Assento e Ingresso");
+        setTitle("Selecionar Assentos e Ingresso");
         setSize(900, 700);
         setLocationRelativeTo(null);
         setLayout(null);
         getContentPane().setBackground(new Color(18, 18, 30));
 
-        // Botão Voltar
         JButton backButton = new JButton("← Voltar");
         backButton.setBounds(20, 20, 100, 30);
         backButton.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -67,7 +68,7 @@ public class SeatAndTicketSelectionScreen extends JFrame
 
         add(backButton);
 
-        JLabel header = new JLabel("🎟️ Selecione seu tipo de ingresso e assento");
+        JLabel header = new JLabel("🎟️ Selecione seus assentos e tipo de ingresso");
         header.setFont(new Font("SansSerif", Font.BOLD, 22));
         header.setForeground(new Color(160, 64, 255));
         header.setBounds(200, 20, 600, 30);
@@ -90,11 +91,17 @@ public class SeatAndTicketSelectionScreen extends JFrame
         ticketTypeCombo.addActionListener(e -> updatePrice());
         add(ticketTypeCombo);
 
-        priceLabel = new JLabel("Valor: R$ 20.00");
+        priceLabel = new JLabel("Valor unitário: R$ 20.00");
         priceLabel.setForeground(Color.WHITE);
         priceLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         priceLabel.setBounds(580, 80, 200, 30);
         add(priceLabel);
+
+        selectedSeatsLabel = new JLabel("Assentos selecionados: Nenhum");
+        selectedSeatsLabel.setForeground(Color.YELLOW);
+        selectedSeatsLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        selectedSeatsLabel.setBounds(50, 120, 600, 30);
+        add(selectedSeatsLabel);
 
         seatPanel = new JPanel(new GridLayout(5, 10, 8, 8));
         seatPanel.setBounds(100, 160, 700, 300);
@@ -105,22 +112,37 @@ public class SeatAndTicketSelectionScreen extends JFrame
         renderSeats();
 
         JButton nextButton = new JButton("Próximo");
-        nextButton.setBounds(380, 500, 120, 40);
+        nextButton.setBounds(300, 500, 120, 40);
         nextButton.setFocusPainted(false);
         nextButton.setBackground(new Color(160, 64, 255));
         nextButton.setForeground(Color.WHITE);
         nextButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         add(nextButton);
 
+        JButton clearButton = new JButton("Limpar");
+        clearButton.setBounds(450, 500, 120, 40);
+        clearButton.setFocusPainted(false);
+        clearButton.setBackground(new Color(200, 70, 70));
+        clearButton.setForeground(Color.WHITE);
+        clearButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        add(clearButton);
+
         nextButton.addActionListener(e -> {
-            if (selectedSeat.isEmpty()) 
+            if (selectedSeats.isEmpty()) 
             {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um assento.");
+                JOptionPane.showMessageDialog(this, "Por favor, selecione pelo menos um assento.");
                 return;
             }
           
-            new ProductSelectionScreen(selectedPrice, this);
+            double totalPrice = selectedSeats.size() * selectedPrice;
+            new ProductSelectionScreen(totalPrice, this);
             setVisible(false);
+        });
+
+        clearButton.addActionListener(e -> {
+            selectedSeats.clear();
+            updateSelectedSeatsLabel();
+            renderSeats(); 
         });
 
         setVisible(true);
@@ -137,14 +159,18 @@ public class SeatAndTicketSelectionScreen extends JFrame
                 int movieId = rs.getInt("filme_id");
                 int roomId = rs.getInt("sala_id");
                 
-                // Buscar informações da sala separadamente
                 String roomInfo = "Sala " + roomId;
-                try {
+                try 
+                {
                     ResultSet roomRs = roomDAO.list("id_sala = " + roomId);
-                    if (roomRs.next()) {
+
+                    if (roomRs.next()) 
+                    {
                         roomInfo = "Sala " + roomRs.getString("numeroSala");
                     }
-                } catch (SQLException e) {
+                } 
+                catch (SQLException e) 
+                {
                     System.err.println("Erro ao buscar informações da sala: " + e.getMessage());
                 }
 
@@ -168,6 +194,7 @@ public class SeatAndTicketSelectionScreen extends JFrame
         try 
         {
             ResultSet sessionRs = sessionDAO.list("id_sessao = " + sessionId);
+            
             if (sessionRs.next()) 
             {
                 int roomId = sessionRs.getInt("sala_id");
@@ -178,7 +205,10 @@ public class SeatAndTicketSelectionScreen extends JFrame
                 {
                     roomMaxCapacity = roomRs.getInt("capacidadeMaxima");
                 }
+
+                roomRs.close();
             }
+            sessionRs.close();
         } 
         catch (SQLException e) 
         {
@@ -192,9 +222,9 @@ public class SeatAndTicketSelectionScreen extends JFrame
         seatPanel.removeAll();
         Set<String> occupiedSeats = getOccupiedSeats();
         
-        int j = 0;
+        int maxCapacity = roomCapacity(0);
 
-        for (int i = 1; i <= roomCapacity(j); i++) 
+        for (int i = 1; i <= maxCapacity; i++) 
         {
             String seatNum = String.valueOf(i);
             JButton seatBtn = new JButton(seatNum);
@@ -207,15 +237,17 @@ public class SeatAndTicketSelectionScreen extends JFrame
                 seatBtn.setBackground(Color.DARK_GRAY);
                 seatBtn.setForeground(Color.LIGHT_GRAY);
             } 
+            else if (selectedSeats.contains(seatNum))
+            {
+                seatBtn.setBackground(new Color(255, 200, 50));
+                seatBtn.setForeground(Color.BLACK);
+                seatBtn.addActionListener(e -> toggleSeatSelection(seatNum));
+            }
             else 
             {
                 seatBtn.setBackground(new Color(100, 200, 100));
                 seatBtn.setForeground(Color.BLACK);
-                seatBtn.addActionListener(e -> 
-                {
-                    selectedSeat = seatNum;
-                    highlightSelectedSeat(seatBtn);
-                });
+                seatBtn.addActionListener(e -> toggleSeatSelection(seatNum));
             }
 
             seatPanel.add(seatBtn);
@@ -224,6 +256,35 @@ public class SeatAndTicketSelectionScreen extends JFrame
         seatPanel.revalidate();
         seatPanel.repaint();
     }
+    
+    private void toggleSeatSelection(String seatNum) 
+    {
+        if (selectedSeats.contains(seatNum)) 
+        {
+            selectedSeats.remove(seatNum);
+        } 
+        else 
+        {
+            selectedSeats.add(seatNum);
+        }
+        
+        updateSelectedSeatsLabel();
+        renderSeats();
+    }
+    
+    private void updateSelectedSeatsLabel() 
+    {
+        if (selectedSeats.isEmpty()) 
+        {
+            selectedSeatsLabel.setText("Assentos selecionados: Nenhum");
+        } 
+        else 
+        {
+            double totalPrice = selectedSeats.size() * selectedPrice;
+            selectedSeatsLabel.setText("Assentos selecionados: " + selectedSeats + 
+                                     " | Total: R$ " + String.format("%.2f", totalPrice));
+        }
+    }
 
     private Set<String> getOccupiedSeats() 
     {
@@ -231,6 +292,7 @@ public class SeatAndTicketSelectionScreen extends JFrame
         try 
         {
             ResultSet rs = ticketDAO.list("sessao_id = " + sessionId);
+
             while (rs.next()) 
             {
                 set.add(String.valueOf(rs.getInt("poltrona")));
@@ -244,34 +306,42 @@ public class SeatAndTicketSelectionScreen extends JFrame
         return set;
     }
 
-    public boolean purchaseTicket(int clientId) 
+    public boolean purchaseTickets(int clientId) 
     {
-        if (selectedSeat.isEmpty()) {
+        if (selectedSeats.isEmpty()) 
+        {
             return false;
         }
         
         try 
         {
-            MovieTickets ticket = new MovieTickets();
-            ticket.setSessionId(sessionId);
-            ticket.setClientId(clientId);
-            ticket.setSeatNumber(Integer.parseInt(selectedSeat));
-            ticket.setPrice(selectedPrice);
-            ticket.setTicketType(ticketTypeCombo.getSelectedItem().toString().split(" - ")[0]);
-            
-            int result = ticket.save();
+            String ticketType = ticketTypeCombo.getSelectedItem().toString().split(" - ")[0];
 
-            if (result > 0) 
+            for (String seatNum : selectedSeats) 
             {
-                updateRoomCapacity();
-                return true;
+                MovieTickets ticket = new MovieTickets();
+                ticket.setSessionId(sessionId);
+                ticket.setClientId(clientId);
+                ticket.setSeatNumber(Integer.parseInt(seatNum));
+                ticket.setPrice(selectedPrice);
+                ticket.setTicketType(ticketType);
+                
+                int result = ticket.save();
+                if (result <= 0) 
+                {
+                    JOptionPane.showMessageDialog(this, "Erro ao registrar ingresso para assento " + seatNum);
+                    return false;
+                }
             }
+            
+            updateRoomCapacity();
+            return true;
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     private void updateRoomCapacity() 
@@ -287,14 +357,25 @@ public class SeatAndTicketSelectionScreen extends JFrame
 
                 if (roomRs.next()) 
                 {
-                    int currentCapacity = roomRs.getInt("capacidadeAtual");
+                    int currentOccupied = roomRs.getInt("capacidadeAtual");
+                    int maxCapacity = roomRs.getInt("capacidadeMaxima");
 
-                    if (currentCapacity > 0 && currentCapacity < roomRs.getInt("capacidadeMaxima")) 
+                    int newOccupied = currentOccupied + selectedSeats.size();
+                    
+                    if (newOccupied <= maxCapacity) 
                     {
-                        roomDAO.updateCurrentCapacity(roomId, currentCapacity + 1);
+                        roomDAO.updateCurrentCapacity(roomId, newOccupied);
+                        System.out.println("Capacidade atualizada. Sala " + roomId + ": " + newOccupied + "/" + maxCapacity + 
+                                         " (+" + selectedSeats.size() + " assentos)");
+                    } 
+                    else 
+                    {
+                        System.out.println("ERRO: Tentativa de exceder capacidade da sala " + roomId + "!");
                     }
                 }
+                roomRs.close();
             }
+            sessionRs.close();
         } 
         catch (SQLException e) 
         {
@@ -302,32 +383,37 @@ public class SeatAndTicketSelectionScreen extends JFrame
         }
     }
 
-    // Método para finalizar compra completa (ingresso + produtos)
     public void finalizePurchase(int clientId, double totalAmount) 
     {
         try 
          {
-            // 1. Registrar o ingresso
-            if (!purchaseTicket(clientId)) 
+            if (!purchaseTickets(clientId)) 
             {
-                JOptionPane.showMessageDialog(this, "Erro ao registrar ingresso!");
+                JOptionPane.showMessageDialog(this, "Erro ao registrar ingressos!");
                 return;
             }
 
-                JOptionPane.showMessageDialog(this, 
+            String seatsText = selectedSeats.size() == 1 ? 
+                "Assento: " + selectedSeats.get(0) : 
+                "Assentos: " + String.join(", ", selectedSeats);
+
+            JOptionPane.showMessageDialog(this, 
                 "Compra finalizada com sucesso!\n" +
-                "Assento: " + selectedSeat + "\n" +
+                seatsText + "\n" +
+                "Quantidade: " + selectedSeats.size() + " ingresso(s)\n" +
                 "Valor total: R$ " + String.format("%.2f", totalAmount),
                 "Sucesso", 
                 JOptionPane.INFORMATION_MESSAGE);
 
             dispose();
+
             if (previousScreen != null) 
             {
                 previousScreen.setVisible(true);
             }
 
-        } catch (Exception e) 
+        } 
+        catch (Exception e) 
         {
             JOptionPane.showMessageDialog(this, "Erro ao finalizar compra: " + e.getMessage());
             e.printStackTrace();
@@ -346,19 +432,8 @@ public class SeatAndTicketSelectionScreen extends JFrame
         else if (selected.contains("3D")) selectedPrice = 30;
         else if (selected.contains("IMAX")) selectedPrice = 40;
         else selectedPrice = 50;
-        priceLabel.setText("Valor: R$ " + String.format("%.2f", selectedPrice));
-    }
-
-    private void highlightSelectedSeat(JButton selectedButton) 
-    {
-        for (Component comp : seatPanel.getComponents()) 
-        {
-            if (comp instanceof JButton btn && btn.isEnabled()) 
-            {
-                btn.setBackground(new Color(100, 200, 100));
-            }
-        }
-
-        selectedButton.setBackground(new Color(255, 200, 50));
+        
+        priceLabel.setText("Valor unitário: R$ " + String.format("%.2f", selectedPrice));
+        updateSelectedSeatsLabel();
     }
 }

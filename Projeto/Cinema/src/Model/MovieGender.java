@@ -16,7 +16,7 @@ public class MovieGender
 
     public MovieGender() 
     {
-        // Default constructor
+
     }
     public MovieGender( int idGender, String genderName, String genderDescription ) 
     {
@@ -58,7 +58,7 @@ public class MovieGender
 	{
 		return ( dbQuery.select("") );
 	}
-    // To string and to Array methods
+
 
 public String toString() 
 	{
