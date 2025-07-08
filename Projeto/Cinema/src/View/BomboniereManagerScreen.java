@@ -2,6 +2,8 @@ package View;
 
 import Model.BomboniereProducts;
 import Model.BomboniereProductsDAO;
+import Model.PurchaseItems;
+import Model.PurchaseItemsDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -337,28 +339,98 @@ public class BomboniereManagerScreen extends JFrame
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Deseja realmente excluir este produto?", 
-            "Confirmar exclusão", 
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) 
+        try 
         {
-            BomboniereProducts product = new BomboniereProducts();
-            product.setIdProduct(selectedProductId);
-            int result = productDAO.delete(product);
-
-            if (result > 0) 
+            PurchaseItemsDAO itemsDAO = new PurchaseItemsDAO();
+            ResultSet itemsRs = itemsDAO.list("produto_id = " + selectedProductId);
+            
+            java.util.List<Integer> itemIds = new java.util.ArrayList<>();
+            
+            while (itemsRs.next()) 
             {
-                JOptionPane.showMessageDialog(this, "Produto excluído com sucesso!");
-                clearFields();
-                loadProducts();
+                itemIds.add(itemsRs.getInt("id_item"));
+            }
+            itemsRs.close();
+            
+            if (!itemIds.isEmpty()) 
+            {
+                String message = "Este produto possui " + itemIds.size() + " venda(s) registrada(s).\n" +
+                               "Para excluir o produto, é necessário excluir os registros de venda primeiro.\n\n" +
+                               "Deseja excluir TODAS as vendas e o produto?";
+                
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    message, 
+                    "Atenção - Produto com Vendas", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+                    for (Integer itemId : itemIds) 
+                    {
+                        PurchaseItems item = new PurchaseItems();
+                        item.setIdItem(itemId);
+                        int deleteResult = itemsDAO.delete(item);
+                        if (deleteResult <= 0) 
+                        {
+                            JOptionPane.showMessageDialog(this, 
+                                "Erro ao excluir item de venda ID: " + itemId);
+                            return;
+                        }
+                    }
+                    
+                    BomboniereProducts product = new BomboniereProducts();
+                    product.setIdProduct(selectedProductId);
+                    int result = productDAO.delete(product);
+                    
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Produto e todas as vendas foram excluídos com sucesso.");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Erro ao excluir o produto.");
+                    }
+                }
             } 
             else 
             {
-                JOptionPane.showMessageDialog(this, "Erro ao excluir produto!");
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    "Deseja realmente excluir este produto?", 
+                    "Confirmar exclusão", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+                    BomboniereProducts product = new BomboniereProducts();
+                    product.setIdProduct(selectedProductId);
+                    int result = productDAO.delete(product);
+
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, "Produto excluído com sucesso!");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir produto!");
+                    }
+                }
             }
+            
+        } 
+        catch (SQLException e) 
+        {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao verificar vendas do produto: " + e.getMessage(),
+                "Erro de Banco de Dados",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
+        
+        clearFields();
+        loadProducts();
     }
 
     private void clearFields() 

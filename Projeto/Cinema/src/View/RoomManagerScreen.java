@@ -2,6 +2,10 @@ package View;
 
 import Model.Rooms;
 import Model.RoomsDAO;
+import Model.MovieSessions;
+import Model.MovieSessionsDAO;
+import Model.MovieTickets;
+import Model.MovieTicketsDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -364,36 +368,110 @@ public class RoomManagerScreen extends JFrame
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Tem certeza que deseja excluir esta sala?", 
-            "Confirmar Exclusão", 
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) 
+        try 
         {
-            try 
+            MovieSessionsDAO sessionDAO = new MovieSessionsDAO();
+            ResultSet sessionsRs = sessionDAO.list("sala_id = " + selectedRoomId);
+            
+            java.util.List<Integer> sessionIds = new java.util.ArrayList<>();
+            
+            while (sessionsRs.next()) 
             {
-                Rooms room = new Rooms();
-                room.setRoomId(selectedRoomId);
-
-                int result = roomDAO.delete(room);
-                if (result > 0) 
+                sessionIds.add(sessionsRs.getInt("id_sessao"));
+            }
+            sessionsRs.close();
+            
+            if (!sessionIds.isEmpty()) 
+            {
+                String message = "Esta sala possui " + sessionIds.size() + " sessão(ões) registrada(s).\n" +
+                               "Para excluir a sala, é necessário excluir as sessões primeiro.\n\n" +
+                               "Deseja excluir TODAS as sessões e a sala?";
+                
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    message, 
+                    "Atenção - Sala com Sessões", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                
+                if (confirm == JOptionPane.YES_OPTION) 
                 {
-                    JOptionPane.showMessageDialog(this, "Sala excluída com sucesso!");
-                    loadRooms();
-                    clearFields();
-                    selectedRoomId = 0;
-                } 
-                else 
-                {
-                    JOptionPane.showMessageDialog(this, "Erro ao excluir sala.");
+                    MovieTicketsDAO ticketsDAO = new MovieTicketsDAO();
+                    
+                    for (Integer sessionId : sessionIds) 
+                    {
+                        ResultSet ticketsRs = ticketsDAO.list("sessao_id = " + sessionId);
+                        
+                        while (ticketsRs.next()) 
+                        {
+                            MovieTickets ticket = new MovieTickets();
+                            ticket.setIdTicket(ticketsRs.getInt("id_ingresso"));
+                            ticketsDAO.delete(ticket);
+                        }
+                        ticketsRs.close();
+                        
+                        MovieSessions session = new MovieSessions();
+                        session.setIdSession(sessionId);
+                        int deleteResult = sessionDAO.delete(session);
+                        if (deleteResult <= 0) 
+                        {
+                            JOptionPane.showMessageDialog(this, 
+                                "Erro ao excluir sessão ID: " + sessionId);
+                            return;
+                        }
+                    }
+                    
+                    Rooms room = new Rooms();
+                    room.setRoomId(selectedRoomId);
+                    int result = roomDAO.delete(room);
+                    
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Sala e todas as sessões foram excluídas com sucesso.");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Erro ao excluir a sala.");
+                    }
                 }
             } 
-            catch (Exception e) 
+            else 
             {
-                JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    "Deseja realmente excluir esta sala?", 
+                    "Confirmar exclusão", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+                    Rooms room = new Rooms();
+                    room.setRoomId(selectedRoomId);
+                    int result = roomDAO.delete(room);
+
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, "Sala excluída com sucesso!");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir sala!");
+                    }
+                }
             }
+            
+        } 
+        catch (SQLException e) 
+        {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao verificar sessões da sala: " + e.getMessage(),
+                "Erro de Banco de Dados",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
+        
+        clearFields();
+        loadRooms();
     }
 
     private void clearFields() 

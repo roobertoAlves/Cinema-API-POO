@@ -684,13 +684,10 @@ public class MovieSessionManagerScreen extends JFrame
     private void clearFields() 
     {
         selectedSessionId = 0;
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        dateField.setText(sdf.format(new java.util.Date()));
-        
-        timeField.setText("20:00:00");
-        durationField.setText("01:30:00");
-        priceField.setText("20.00");
+        dateField.setText("");
+        timeField.setText("");
+        durationField.setText("");
+        priceField.setText("");
         sessionTypeField.setText("");
         
         if (movieCombo.getItemCount() > 0) movieCombo.setSelectedIndex(0);

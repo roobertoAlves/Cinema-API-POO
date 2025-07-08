@@ -3,6 +3,10 @@ package View;
 import Model.Movies;
 import Model.MoviesDAO;
 import Model.MovieGenderDAO;
+import Model.MovieSessions;
+import Model.MovieSessionsDAO;
+import Model.MovieTickets;
+import Model.MovieTicketsDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -282,11 +286,110 @@ public class MovieManagerScreen extends JFrame
             return;
         }
 
-        Movies movie = new Movies();
-        movie.setMovieId(selectedMovieId);
-        movieDAO.delete(movie);
-        loadMovies();
+        try 
+        {
+            MovieSessionsDAO sessionDAO = new MovieSessionsDAO();
+            ResultSet sessionsRs = sessionDAO.list("filme_id = " + selectedMovieId);
+            
+            java.util.List<Integer> sessionIds = new java.util.ArrayList<>();
+            
+            while (sessionsRs.next()) 
+            {
+                sessionIds.add(sessionsRs.getInt("id_sessao"));
+            }
+            sessionsRs.close();
+            
+            if (!sessionIds.isEmpty()) 
+            {
+                String message = "Este filme possui " + sessionIds.size() + " sessão(ões) registrada(s).\n" +
+                               "Para excluir o filme, é necessário excluir as sessões primeiro.\n\n" +
+                               "Deseja excluir TODAS as sessões e o filme?";
+                
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    message, 
+                    "Atenção - Filme com Sessões", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+                    MovieTicketsDAO ticketsDAO = new MovieTicketsDAO();
+                    
+                    for (Integer sessionId : sessionIds) 
+                    {
+                        ResultSet ticketsRs = ticketsDAO.list("sessao_id = " + sessionId);
+                        
+                        while (ticketsRs.next()) 
+                        {
+                            MovieTickets ticket = new MovieTickets();
+                            ticket.setIdTicket(ticketsRs.getInt("id_ingresso"));
+                            ticketsDAO.delete(ticket);
+                        }
+                        ticketsRs.close();
+                        
+                        MovieSessions session = new MovieSessions();
+                        session.setIdSession(sessionId);
+                        int deleteResult = sessionDAO.delete(session);
+                        if (deleteResult <= 0) 
+                        {
+                            JOptionPane.showMessageDialog(this, 
+                                "Erro ao excluir sessão ID: " + sessionId);
+                            return;
+                        }
+                    }
+                    
+                    Movies movie = new Movies();
+                    movie.setMovieId(selectedMovieId);
+                    int result = movieDAO.delete(movie);
+                    
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Filme e todas as sessões foram excluídos com sucesso.");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, 
+                            "Erro ao excluir o filme.");
+                    }
+                }
+            } 
+            else 
+            {
+                int confirm = JOptionPane.showConfirmDialog(this, 
+                    "Deseja realmente excluir este filme?", 
+                    "Confirmar exclusão", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) 
+                {
+                    Movies movie = new Movies();
+                    movie.setMovieId(selectedMovieId);
+                    int result = movieDAO.delete(movie);
+
+                    if (result > 0) 
+                    {
+                        JOptionPane.showMessageDialog(this, "Filme excluído com sucesso!");
+                    } 
+                    else 
+                    {
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir filme!");
+                    }
+                }
+            }
+            
+        } 
+        catch (SQLException e) 
+        {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao verificar sessões do filme: " + e.getMessage(),
+                "Erro de Banco de Dados",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
         clearFields();
+        loadMovies();
     }
 
     private void clearFields() 
@@ -297,9 +400,9 @@ public class MovieManagerScreen extends JFrame
         durationField.setText("");
         languageField.setText("");
         distributorField.setText("");
-        typeCombo.setSelectedIndex(0);
-        dubbingCombo.setSelectedIndex(0);
-        subtitleCombo.setSelectedIndex(0);
-        genreCombo.setSelectedIndex(0);
+        if (typeCombo.getItemCount() > 0) typeCombo.setSelectedIndex(0);
+        if (dubbingCombo.getItemCount() > 0) dubbingCombo.setSelectedIndex(0);
+        if (subtitleCombo.getItemCount() > 0) subtitleCombo.setSelectedIndex(0);
+        if (genreCombo.getItemCount() > 0) genreCombo.setSelectedIndex(0);
     }
 }
